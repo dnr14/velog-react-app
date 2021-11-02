@@ -1,0 +1,48 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "extends": [
+    "airbnb",
+    "airbnb/hooks",
+    "eslint:recommended",
+    "plugin:prettier/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "ecmaFeatures": {
+      "modules": true,
+      "jsx": true
+    },
+    "sourceType": "module",
+    "requireConfigFile": false
+  },
+  "ignorePatterns": "node_modules",
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": ["js", "jsx"] }],
+    "react/prop-types": ["off"],
+    "react/jsx-props-no-spreading":["off"],
+    "jsx-a11y/click-events-have-key-events":"off",
+    "no-unneeded-ternary":"off",
+    "jsx-a11y/no-noninteractive-element-interactions":"off",
+    "react/no-array-index-key":["off"],
+    "react-hooks/exhaustive-deps": ["warn"],
+    "arrow-parens": ["warn", "as-needed"],
+    "no-unused-vars": ["warn"],
+    "no-console":"warn",
+    "no-undef":"off",
+    "import/prefer-default-export": ["off"],
+    "jsx-a11y/no-autofocus": "off",
+    "jsx-a11y/accessible-emoji":"off",
+    "import/no-unresolved": "off",
+    "import/extensions":"off",
+    "spaced-comment": ["error", "always"] ,
+    "no-shadow":["off"],
+    "no-use-before-define": ["error", { "variables": false }]
+  }
+}
