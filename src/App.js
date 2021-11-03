@@ -4,7 +4,7 @@ import MainPage from './Components/views/MainPage/MainPage';
 import Top from './Components/views/Top/Top';
 import PostPage from './Components/views/PostPage/PostPage';
 import UpdatePostPage from './Components/views/UpdatePostPage/UpdatePostPage';
-import InsertPostPage from './Components/InsertPostPage/InsertPostPage';
+import InsertPostPage from './Components/views/InsertPostPage/InsertPostPage';
 
 const App = () => {
   return (
