@@ -1,32 +1,28 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
-//import { makeYYMMDD } from '../../../utils/dateUtil';
+import { makeYYMMDD } from '@/utils/dateUtil';
+import instance from '@/api/http';
 
 function PostPage() {
   const [Post, setPost] = useState();
   let postDate;
-  const {id} = useParams();
+  const { id } = useParams();
 
   useEffect(() => {
-    
-    axios.get(`https://limitless-sierra-67996.herokuapp.com/v1/posts/${id}`)
-    .then(res => {
-        setPost(res.data);
-        }
-    )
-  }, [])
+    instance.get(`/posts/${id}`).then(res => {
+      setPost(res.data);
+    });
+  }, []);
 
   if (Post) {
     const date = Post.createdAt;
-    postDate =
-      date.substring(0, 4) +
-      '년 ' +
-      date.substring(5, 7) +
-      '월 ' +
-      date.substring(8, 10) +
-      '일';
+    postDate = `${date.substring(0, 4)}년 ${date.substring(
+      5,
+      7
+    )}월 ${date.substring(8, 10)}일`;
   }
 
   const PostTitle = styled.h1`
@@ -75,10 +71,10 @@ function PostPage() {
     }
   `;
 
-  //Delete Post
+  // Delete Post
   const deletePostHandler = () => {};
 
-  //Update Post
+  // Update Post
   const updatePostHandeler = () => {};
 
   return (
@@ -94,7 +90,7 @@ function PostPage() {
               className="postInfo"
               style={{ display: 'flex', justifyContent: 'space-between' }}
             >
-              <PostDate>{postDate}</PostDate>
+              <PostDate>{makeYYMMDD(new Date(Post.createdAt))}</PostDate>
               <PostManage>
                 <span onClick={updatePostHandeler}>수정</span>
                 <span onClick={deletePostHandler}>삭제</span>
