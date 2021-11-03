@@ -4,7 +4,8 @@ const theme = {
   main: {
     color: {},
     media: {
-      tab: `@media screen and (max-width: 767px)`,
+      tab1: `@media screen and (max-width: 767px)`,
+      tab2: `@media screen and (max-width: 944px)`,
       pc1: `@media screen and (max-width: 1056px)`,
       pc2: `@media screen and (max-width: 1440px)`,
       pc3: `@media screen and (max-width: 1919px)`,
