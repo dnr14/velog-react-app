@@ -100,7 +100,7 @@ function PostPage() {
                             <PostDate>{postDate}</PostDate>
                             <PostManage>
                                 <span onClick={updatePostHandeler}>수정</span>
-                                <span onCLick={deletePostHandler}>삭제</span>
+                                <span onClick={deletePostHandler}>삭제</span>
                             </PostManage>
                         </div>
                         <div className="tags" style={{display:'flex', gap:'14px', marginTop:'14px'}}>
