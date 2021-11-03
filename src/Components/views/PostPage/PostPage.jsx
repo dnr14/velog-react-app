@@ -2,29 +2,21 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import styled from 'styled-components';
+//import { makeYYMMDD } from '../../../utils/dateUtil';
 
 function PostPage() {
   const [Post, setPost] = useState();
   let postDate;
-  let testContent = '안녕하세요\n 저는 이번에\n새로가입한\n사람입니다.';
-  // const {id} = useParams();
+  const {id} = useParams();
 
-  // useEffect(() => {
-  //     axios.get(`https://limitless-sierra-67996.herokuapp.com/v1/${id}`)
-  //     .then(res => {
-  //             setPost(res.data);
-  //         }
-  //     )
-  // }, [])
-
-  //Import post
   useEffect(() => {
-    axios
-      .get('https://limitless-sierra-67996.herokuapp.com/v1/posts')
-      .then(res => {
-        setPost(res.data.results[0]);
-      });
-  }, []);
+    
+    axios.get(`https://limitless-sierra-67996.herokuapp.com/v1/posts/${id}`)
+    .then(res => {
+        setPost(res.data);
+        }
+    )
+  }, [])
 
   if (Post) {
     const date = Post.createdAt;
@@ -62,7 +54,6 @@ function PostPage() {
   `;
 
   const Tag = styled.span`
-    padding: 0 14px;
     color: #08a678;
     font-weight: 500;
     background-color: rgb(235, 235, 235);
