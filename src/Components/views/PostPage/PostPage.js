@@ -4,7 +4,6 @@ import { useParams } from 'react-router';
 import styled from 'styled-components';
 
 function PostPage() {
-
     const [Post, setPost] = useState();
     let postDate;
     let testContent = "안녕하세요\n 저는 이번에\n새로가입한\n사람입니다."
@@ -128,7 +127,11 @@ function PostPage() {
                 : <div>포스트를 불러올 수 없습니다.</div>
             }
         </div>
-    )
+      ) : (
+        <div>포스트를 불러올 수 없습니다.</div>
+      )}
+    </div>
+  );
 }
 
-export default PostPage
+export default PostPage;
