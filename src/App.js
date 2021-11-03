@@ -13,7 +13,7 @@ const App = () => {
       <div>
         <Switch>
           <Route path="/post/:id" component={PostPage} />
-          <Route path="/post/update/:id" component={UpdatePostPage} />
+          <Route path="/update/:id" component={UpdatePostPage} />
           <Route path="/posttest" component={PostPage} />
           <Route path="/insert" component={InsertPostPage} />
           <Route exact path="/" component={MainPage} />
