@@ -13,7 +13,8 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={MainPage} />
           <Route exact path="/post/:id" component={PostPage} />
-          <Route exact path="/post/update" component={UpdatePostPage} />
+          <Route exact path="/post/update/:id" component={UpdatePostPage} />
+          <Route exact path="/posttest" component={PostPage} />
         </Switch>
       </div>
     </BrowserRouter>
