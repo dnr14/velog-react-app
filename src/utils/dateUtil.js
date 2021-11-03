@@ -1,4 +1,5 @@
-export const makeYYMMDD = date => {
+export const makeYYMMDD = value => {
+  const date = new Date(value);
   const yyyy = date.getFullYear();
   const mm = date.getMonth() + 1;
   const dd = date.getDay();
