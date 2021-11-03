@@ -4,17 +4,19 @@ import MainPage from './Components/views/MainPage/MainPage';
 import Top from './Components/views/Top/Top';
 import PostPage from './Components/views/PostPage/PostPage';
 import UpdatePostPage from './Components/views/UpdatePostPage/UpdatePostPage';
+import InsertPostPage from './Components/InsertPostPage/InsertPostPage';
 
 const App = () => {
   return (
     <BrowserRouter>
       <Top />
-      <div className="App">
+      <div>
         <Switch>
+          <Route path="/post/:id" component={PostPage} />
+          <Route path="/post/update/:id" component={UpdatePostPage} />
+          <Route path="/posttest" component={PostPage} />
+          <Route path="/insert" component={InsertPostPage} />
           <Route exact path="/" component={MainPage} />
-          <Route exact path="/post/:id" component={PostPage} />
-          <Route exact path="/post/update/:id" component={UpdatePostPage} />
-          <Route exact path="/posttest" component={PostPage} />
         </Switch>
       </div>
     </BrowserRouter>
