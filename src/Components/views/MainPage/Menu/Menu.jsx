@@ -67,14 +67,16 @@ const Menu = (
             <path d="M7 10l5 5 5-5z" />
           </svg>
         </Styled.SelectBox>
-        <MenuBar isOpen={isSelectOpen} setIsOpen={setIsSelectOpen}>
-          <Styled.UlWrapper>
-            <li>오늘</li>
-            <li>이번 주</li>
-            <li>이번 달</li>
-            <li>올해</li>
-          </Styled.UlWrapper>
-        </MenuBar>
+        {isSelectOpen && (
+          <MenuBar isOpen={isSelectOpen} setIsOpen={setIsSelectOpen}>
+            <Styled.UlWrapper>
+              <li>오늘</li>
+              <li>이번 주</li>
+              <li>이번 달</li>
+              <li>올해</li>
+            </Styled.UlWrapper>
+          </MenuBar>
+        )}
       </Styled.RightBox>
       <Styled.NoticeBox onClick={handleManubarClick} id="notice">
         <svg
@@ -88,18 +90,20 @@ const Menu = (
         >
           <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
         </svg>
-        <MenuBar isOpen={isNoticeOpen} setIsOpen={setIsNoticeOpen}>
-          <Styled.UlWrapper>
-            <li>공지사항</li>
-            <li>태그 목록</li>
-            <li>서비스 정책</li>
-            <li>Slack</li>
-          </Styled.UlWrapper>
-          <div className="contact">
-            <h5>문의</h5>
-            <div className="email">contact@velog.io</div>
-          </div>
-        </MenuBar>
+        {isNoticeOpen && (
+          <MenuBar isOpen={isNoticeOpen} setIsOpen={setIsNoticeOpen}>
+            <Styled.UlWrapper>
+              <li>공지사항</li>
+              <li>태그 목록</li>
+              <li>서비스 정책</li>
+              <li>Slack</li>
+            </Styled.UlWrapper>
+            <div className="contact">
+              <h5>문의</h5>
+              <div className="email">contact@velog.io</div>
+            </div>
+          </MenuBar>
+        )}
       </Styled.NoticeBox>
     </Styled.FlexBox>
   );
