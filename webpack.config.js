@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const port = process.env.port || 3000;
 
@@ -60,12 +61,14 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './public/index.html',
-      favicon: null,
     }),
     new CleanWebpackPlugin(),
     new ReactRefreshWebpackPlugin(),
     new webpack.DefinePlugin({
       PATH: JSON.stringify('http://localhost:5000'),
+    }),
+    new CopyPlugin({
+      patterns: [{ from: 'public/static/' }],
     }),
   ],
 
