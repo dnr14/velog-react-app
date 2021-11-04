@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { get } from '@/api/posts';
+import * as posts from '@/api/posts';
+import * as comments from '@/api/comments';
 import Main from './Main/Main';
 import Menu from './Menu/Menu';
 import * as Styled from './Main/style';
@@ -29,10 +30,19 @@ function MainPage() {
   };
 
   useEffect(() => {
-    get().then(({ data }) => {
-      const { results } = data;
-      setList(results);
-    });
+    (async () => {
+      try {
+        const promises = [posts.get(), comments.get()];
+        const [postsResponse, commentsResponse] = await Promise.all(promises);
+        setList({
+          posts: postsResponse.data.results,
+          comments: commentsResponse.data.results,
+        });
+      } catch (error) {
+        // 모달 창 작업 해야된다.
+        alert('서버에러');
+      }
+    })();
   }, []);
 
   return (
@@ -47,7 +57,7 @@ function MainPage() {
           isSelectOpen={isSelectOpen}
           ref={[crrentLink, lineRef]}
         />
-        <Main list={list} />
+        {list && <Main list={list} />}
       </Styled.Container>
     </>
   );
