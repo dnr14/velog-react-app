@@ -18,13 +18,21 @@ function PostPage(props) {
     });
 
     instance.get('/comments').then(res => {
-      const arr = res.data.results.filter(data => data.postId === id);
+      // const arr = res.data.results.filter(data => data.postId === id);
+      const arr = res.data.results;
       setComments(arr);
+      console.log(arr);
     });
   }, []);
 
   // Delete Post
-  const deletePostHandler = () => {};
+  const deletePostHandler = () => {
+    // Comments.forEach(comment => {
+    //   instance.delete(`/comments/${comment.id}`).then(() => {
+    //     console.log('댓글 삭제 완료');
+    //   });
+    // });
+  };
 
   // Update Post
   const updatePostHandeler = () => {
@@ -36,12 +44,13 @@ function PostPage(props) {
     if (InputComment.length === 0) return;
 
     const variable = {
-      postId: Post.id,
+      postId: id,
       body: InputComment,
     };
 
-    // Comments state 갱신
+    // 댓글 생성 후 Comments state 갱신
     instance.post('/comments', variable).then(res => {
+      console.log(res);
       setComments(Comments.concat(res.data));
       setInputComment('');
     });
@@ -116,7 +125,11 @@ function PostPage(props) {
                 }}
               />
               <Styled.ButtonWrap>
-                <button type="button" onClick={insertCommentHander}>
+                <button
+                  type="button"
+                  className="insertBtn"
+                  onClick={insertCommentHander}
+                >
                   댓글 작성
                 </button>
               </Styled.ButtonWrap>

@@ -49,12 +49,12 @@ export const PostContent = styled.div`
 export const ButtonWrap = styled.div`
   display: flex;
   justify-content: flex-end;
+  gap: 10px;
 
   button {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #14b885;
     font-weight: 500;
     height: 32px;
     padding: 0 20px;
@@ -62,9 +62,21 @@ export const ButtonWrap = styled.div`
     border-radius: 5px;
     font-size: 1rem;
     cursor: pointer;
+  }
+
+  .insertBtn {
+    background-color: #14b885;
 
     &:hover {
       background-color: #20c997;
+    }
+  }
+
+  .cancelBtn {
+    background-color: #858e96;
+
+    &:hover {
+      background-color: #acb5bd;
     }
   }
 `;
@@ -102,5 +114,40 @@ export const TextArea = styled.textarea`
   //Firefox 18-
   &:-moz-placeholder {
     color: rgb(200, 200, 200);
+  }
+`;
+
+export const CommentWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  border-bottom: 1px solid #dbdbdb;
+  padding: 24px 0;
+
+  $:last-child {
+    border-bottom: 1px solid pink;
+  }
+`;
+
+export const CommentManage = styled.div`
+  display: flex;
+  gap: 10px;
+
+  span {
+    color: gray;
+    cursor: pointer;
+
+    &:hover {
+      color: black;
+    }
+  }
+`;
+
+export const CommentInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  span {
+    color: #868e96;
+    font-size: 0.9rem;
   }
 `;
