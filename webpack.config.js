@@ -15,6 +15,9 @@ const RESOLVE = {
     '@': path.resolve(__dirname, 'src/'),
     'Components': path.resolve(__dirname, 'src/Components/views/'),
   },
+  fallback: {
+    util: require.resolve('util/'),
+  },
 };
 const ENTRY = './index.js';
 
@@ -112,6 +115,9 @@ module.exports = {
     new ReactRefreshWebpackPlugin(),
     new webpack.DefinePlugin({
       PATH: JSON.stringify('http://localhost:5000'),
+      // s3 api key와 버킷 이름 세팅
+      API_KEY: JSON.stringify(''),
+      BUCKET: JSON.stringify(''),
     }),
     new CopyPlugin({
       patterns: [{ from: 'public/static/' }],

@@ -49,6 +49,16 @@ export const Button = styled.button`
         }
       `;
     }
+    if (color === 'gray') {
+      return css`
+        background: rgb(134, 142, 150);
+        color: white;
+        &:focus,
+        &:hover {
+          background-color: rgba(134, 142, 150, 0.8);
+        }
+      `;
+    }
     return css`
       background-color: transparent;
       &:hover {
@@ -60,6 +70,42 @@ export const Button = styled.button`
 export const Container = styled.div`
   display: flex;
 `;
+
+export const Body = styled.div`
+  /* padding-top: 2rem; */
+  padding-left: 3rem;
+  padding-right: 3rem;
+
+  ${({ theme }) => theme.insert.media.tab1} {
+    padding: 1rem;
+  }
+`;
+
+export const ButtonBox = styled.div`
+  position: fixed;
+  bottom: 0;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+
+  & > div {
+    gap: 1rem;
+    padding: 1rem 1rem;
+    box-shadow: rgb(0 0 0 / 10%) 0px 0px 8px;
+    background: rgba(255, 255, 255, 0.85);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  & > div > div {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+`;
+
 export const Title = styled.div`
   padding-top: 2rem;
   padding-left: 3rem;
@@ -104,11 +150,13 @@ export const Line = styled.div`
     margin-bottom: 0.66rem;
   }
 `;
+
 export const TagBox = styled.div`
   color: rgb(52, 58, 64);
   font-size: 1.125rem;
   display: flex;
   flex-wrap: wrap;
+  position: relative;
 
   input {
     display: inline-flex;
@@ -123,6 +171,12 @@ export const TagBox = styled.div`
     ${({ theme }) => theme.insert.media.tab1} {
       line-height: 1.5rem;
       font-size: 0.75rem;
+    }
+
+    &:focus + div {
+      opacity: 1;
+      transform: translateY(0px);
+      z-index: 5;
     }
   }
 `;
@@ -154,58 +208,23 @@ export const Tag = styled.div`
   }
 `;
 
-export const Body = styled.div`
-  padding-top: 2rem;
-  padding-left: 3rem;
-  padding-right: 3rem;
-
-  /* & > textarea {
-    display: block;
-    padding: 0px;
-    line-height: 1.5;
-    font-size: 1.5rem;
-    width: 100%;
-    resize: none;
-    outline: none;
-    border: none;
-    background: transparent;
-    color: rgb(33, 37, 41);
-    overflow-y: hidden;
-
-    &::placeholder {
-      color: rgba(33, 37, 41, 0.2);
-      font-style: oblique;
-    }
-    ${({ theme }) => theme.insert.media.tab1} {
-      font-size: 1.2rem;
-    }
-  } */
+export const InputMessage = styled.div`
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 330px;
+  background: rgba(73, 80, 87, 1);
+  padding: 0.7rem 1rem;
+  color: white;
+  line-height: 1.5;
+  font-size: 0.8rem;
+  z-index: -1;
+  top: 100%;
+  transition: opacity 0.5s, z-index 0.5s, transform 0.35s ease-in;
+  opacity: 0;
+  transform: translateY(-30px);
   ${({ theme }) => theme.insert.media.tab1} {
-    padding: 1rem;
-  }
-`;
-
-export const ButtonBox = styled.div`
-  position: fixed;
-  bottom: 0;
-  margin: 0 auto;
-  left: 0;
-  right: 0;
-
-  & > div {
-    /* height: 4rem; */
-    gap: 1rem;
-    padding: 1rem 1rem;
-    box-shadow: rgb(0 0 0 / 10%) 0px 0px 8px;
-    background: rgba(255, 255, 255, 0.85);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  & > div > div {
-    justify-content: flex-end;
-    align-items: center;
+    width: 55%;
   }
 `;

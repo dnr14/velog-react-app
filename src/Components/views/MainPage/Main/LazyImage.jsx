@@ -6,7 +6,7 @@ const LazyImage = ({ thumbnail }) => {
     <>
       <img
         src={thumbnail ? thumbnail : noThumbnail}
-        alt={thumbnail ? 'sample' : 'noThumbnail'}
+        alt={thumbnail ? 'thumbnail' : 'noThumbnail'}
       />
     </>
   );
