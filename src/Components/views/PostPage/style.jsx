@@ -151,3 +151,24 @@ export const CommentInfo = styled.div`
     font-size: 0.9rem;
   }
 `;
+
+export const PostModal = styled.div`
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.8);
+  z-index: 1000;
+`;
+
+export const InnerModal = styled.div`
+  width: 300px;
+  padding: 32px 24px;
+  box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 12px;
+  transition: all 600ms cubic-bezier(0.86, 0, 0.07, 1);
+  transform: matrix(1, 0, 0, 1, 0, 0);
+  border-radius: 5px;
+`;
