@@ -46,5 +46,9 @@ a {
   text-decoration: none;
 }
 
+.ck-editor__editable_inline {
+    min-height: 500px;
+}
+
 `;
 export default GlobalStyle;

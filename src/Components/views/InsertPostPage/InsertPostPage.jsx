@@ -1,13 +1,17 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { newlineCount } from '@/utils/TextUtil';
+import { newlineCount } from '@/utils/textUtil';
 import Write from './Write/Write';
 import * as Styled from './Write/style';
 import * as posts from '@/api/posts';
+import CoustomEditor from './Editor/CoustomEditor';
 
 const KEY_ENUM = {
   enter: 'Enter',
 };
+const TITLE_MAX_NEW_LINE = 5;
+const TITLE_MAX_TEXT = 30;
+const TAGS_MAX_COUNT = 7;
 
 function InsertPostPage() {
   const history = useHistory();
@@ -15,61 +19,87 @@ function InsertPostPage() {
   const [textAreaHeight, setTextAreaHeight] = useState(0);
   const [textAreaWidth, setTextAreaWidth] = useState(0);
   const textareaRef = useRef(null);
-  const inputRef = useRef(null);
-  const { tags, title, body } = form;
+  const tagInputRef = useRef(null);
+  const { tags, title } = form;
 
-  const handlekeyPress = e => {
+  // 태그 제거
+  const tagRemove = e => {
+    const { textContent } = e.target;
+    const { tags } = form;
+    if (tags.delete(textContent)) {
+      setForm(prev => ({ ...prev, tags: new Set([...tags]) }));
+    }
+  };
+
+  // 태그 등록
+  const handlekeyPress = useCallback(e => {
     const { code, target } = e;
     if (code === KEY_ENUM.enter && target.id === 'tags') {
       e.preventDefault();
       const { id, value } = target;
-      inputRef.current.value = '';
-      if (value !== '') {
-        setForm(prev => {
-          if (prev[`${id}`]?.has(value)) return prev;
-          return {
-            ...prev,
-            [`${id}`]: prev[`${id}`]
-              ? new Set([...prev[`${id}`], value])
-              : new Set([value]),
-          };
-        });
-      }
+      setForm(prev => {
+        if (value === '') return prev;
+        // 첫 등록
+        if (!prev[`${id}`]) return { ...prev, [`${id}`]: new Set([value]) };
+        // 동일한 내용이 있다면 태그 추가를 안합니다.
+        if (prev[`${id}`].has(value)) return prev;
+        // 태그 갯수 조절.
+        if (prev[`${id}`].size === TAGS_MAX_COUNT) return prev;
+        const tags = new Set([...prev[`${id}`], value]);
+        return { ...prev, [`${id}`]: tags };
+      });
+      tagInputRef.current.value = '';
     }
-  };
-  const handleChange = e => {
+  }, []);
+
+  // 타이틀 입력
+  const handleChange = useCallback(e => {
     const { id, value } = e.target;
-    if (id !== 'tags') {
-      setForm(prev => ({
-        ...prev,
-        [`${id}`]: value,
-      }));
-    }
-  };
-  const handleSubmit = e => {
-    e.preventDefault();
-    const { tags = [], title, body } = form;
-    if (title && body) {
-      (async () => {
-        try {
-          const response = await posts.insert({
-            title,
-            body,
-            tags: [...tags],
-          });
-          const { data } = response;
-          if (data) {
-            history.push('/');
-          }
-        } catch (error) {
-          alert('서버에러');
-        }
-      })();
-    } else {
-      alert('타이틀 태그 내용을 입력해주세요.');
-    }
+    setForm(prev => {
+      if (newlineCount(value) === TITLE_MAX_NEW_LINE) return prev;
+      if (value.length === TITLE_MAX_TEXT) return prev;
+      return { ...prev, [`${id}`]: value };
+    });
+  }, []);
+
+  // 내용 입력
+  const ckEditorChange = (_, editor) => {
+    const data = editor.getData();
+    setForm(prev => {
+      const { body } = prev;
+      if (!body) return { ...prev, body: data };
+      return { ...prev, body: data };
+    });
   };
 
+  const handleSubmit = useCallback(
+    e => {
+      e.preventDefault();
+      const { tags = [], title, body } = form;
+      if (title && body) {
+        (async () => {
+          try {
+            const response = await posts.insert({
+              title,
+              body,
+              tags: [...tags],
+            });
+            const { data } = response;
+            if (data) {
+              history.push('/');
+            }
+          } catch (error) {
+            alert('서버에러', error);
+          }
+        })();
+      } else {
+        alert('타이틀 내용을 입력해주세요.');
+      }
+    },
+    [form, history]
+  );
+
+  // 리사이즈
   useLayoutEffect(() => {
     let timer;
     let eventHandler;
@@ -95,16 +125,13 @@ function InsertPostPage() {
   }, []);
 
   return (
-    <Write
-      onChange={handleChange}
-      onSubmit={handleSubmit}
-      onKeyPress={handlekeyPress}
-    >
+    <Write onSubmit={handleSubmit} onKeyPress={handlekeyPress}>
       <Styled.Title>
         <textarea
-          ref={textareaRef}
           id="title"
+          ref={textareaRef}
           value={title}
+          onChange={handleChange}
           placeholder="제목을 입력하세요."
           style={{
             height: `${newlineCount(title) * textAreaHeight}px`,
@@ -114,25 +141,20 @@ function InsertPostPage() {
         <Styled.TagBox>
           {tags &&
             [...tags].map((tag, idx) => (
-              <Styled.Tag key={idx}>{tag}</Styled.Tag>
+              <Styled.Tag key={idx} onClick={tagRemove}>
+                {tag}
+              </Styled.Tag>
             ))}
           <input
             type="text"
             id="tags"
             placeholder="태그를 입력해주세요."
-            ref={inputRef}
+            ref={tagInputRef}
           />
         </Styled.TagBox>
       </Styled.Title>
       <Styled.Body>
-        <textarea
-          id="body"
-          placeholder="당신이 이야기를 적어주세요."
-          value={body}
-          style={{
-            height: `${newlineCount(body) * textAreaHeight}px`,
-          }}
-        />
+        <CoustomEditor onChange={ckEditorChange} />
       </Styled.Body>
       <Styled.ButtonBox
         style={{ width: textAreaWidth > 767 ? `${textAreaWidth}px` : `auto` }}
