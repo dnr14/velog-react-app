@@ -15,6 +15,9 @@ const RESOLVE = {
     '@': path.resolve(__dirname, 'src/'),
     'Components': path.resolve(__dirname, 'src/Components/views/'),
   },
+  fallback: {
+    util: require.resolve('util/'),
+  },
 };
 const ENTRY = './index.js';
 
