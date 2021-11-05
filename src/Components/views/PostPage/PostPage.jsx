@@ -18,10 +18,9 @@ function PostPage(props) {
     });
 
     instance.get('/comments').then(res => {
-      // const arr = res.data.results.filter(data => data.postId === id);
-      const arr = res.data.results;
+      const arr = res.data.results.filter(data => data.postId === id);
+      // const arr = res.data.results; // 모든 댓글 확인
       setComments(arr);
-      console.log(arr);
     });
   }, []);
 
@@ -50,7 +49,6 @@ function PostPage(props) {
 
     // 댓글 생성 후 Comments state 갱신
     instance.post('/comments', variable).then(res => {
-      console.log(res);
       setComments(Comments.concat(res.data));
       setInputComment('');
     });
