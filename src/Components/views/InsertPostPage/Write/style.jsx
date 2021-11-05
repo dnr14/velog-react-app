@@ -159,7 +159,7 @@ export const Body = styled.div`
   padding-left: 3rem;
   padding-right: 3rem;
 
-  & > textarea {
+  /* & > textarea {
     display: block;
     padding: 0px;
     line-height: 1.5;
@@ -179,7 +179,7 @@ export const Body = styled.div`
     ${({ theme }) => theme.insert.media.tab1} {
       font-size: 1.2rem;
     }
-  }
+  } */
   ${({ theme }) => theme.insert.media.tab1} {
     padding: 1rem;
   }

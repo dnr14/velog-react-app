@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { makeYYMMDD } from '@/utils/dateUtil';
+import { htmlRemove } from '@/utils/editorUtil';
 import * as Styled from './style';
 import loading from '@/assets/images/loading.gif';
 
@@ -26,7 +27,7 @@ const Main = ({ list }) => {
                   <Link to={`/post/${id}`}>
                     <h4>{title}</h4>
                     <div>
-                      <p>{body}</p>
+                      <p>{htmlRemove(body)}</p>
                     </div>
                   </Link>
                   <div>
