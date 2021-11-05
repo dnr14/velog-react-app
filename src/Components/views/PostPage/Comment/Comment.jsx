@@ -30,8 +30,6 @@ function Comment(props) {
     instance.patch(`/comments/${comment.id}`, variable).then(() => {
       setOpenUpdate(!OpenUpdate);
     });
-
-    console.log('댓글 업데이트!');
   };
 
   return (

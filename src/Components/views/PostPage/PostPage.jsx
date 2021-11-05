@@ -17,20 +17,25 @@ function PostPage(props) {
       setPost(res.data);
     });
 
-    instance.get('/comments').then(res => {
+    instance.get('/comments', { params: { limit: 10000 } }).then(res => {
       const arr = res.data.results.filter(data => data.postId === id);
-      // const arr = res.data.results; // 모든 댓글 확인
       setComments(arr);
+      console.log(res.data);
     });
   }, []);
 
   // Delete Post
   const deletePostHandler = () => {
-    // Comments.forEach(comment => {
-    //   instance.delete(`/comments/${comment.id}`).then(() => {
-    //     console.log('댓글 삭제 완료');
-    //   });
-    // });
+    instance.delete(`/posts/${id}`).then(() => {
+      const promises = Comments.map(comment =>
+        instance.delete(`/comments/${comment.id}`)
+      );
+
+      Promise.all(promises).then(values => {
+        props.history.push('/');
+        console.log(values);
+      });
+    });
   };
 
   // Update Post
