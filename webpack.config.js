@@ -5,7 +5,12 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const { styles } = require('@ckeditor/ckeditor5-dev-utils');
+const dotenv = require('dotenv');
 
+dotenv.config();
+// s3 api key와 버킷 이름 세팅
+const apiKey = process.env.API_KEY || '';
+const bucket = process.env.BUCKET || '';
 const port = process.env.port || 3000;
 const publicPath = '/images';
 
@@ -114,10 +119,8 @@ module.exports = {
     new CleanWebpackPlugin(),
     new ReactRefreshWebpackPlugin(),
     new webpack.DefinePlugin({
-      PATH: JSON.stringify('http://localhost:5000'),
-      // s3 api key와 버킷 이름 세팅
-      API_KEY: JSON.stringify(''),
-      BUCKET: JSON.stringify(''),
+      API_KEY: JSON.stringify(apiKey),
+      BUCKET: JSON.stringify(bucket),
     }),
     new CopyPlugin({
       patterns: [{ from: 'public/static/' }],
