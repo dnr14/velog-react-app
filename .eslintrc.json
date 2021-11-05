@@ -45,6 +45,7 @@
     "no-shadow":["off"],
     "no-use-before-define": ["error", { "variables": false }],
     "jsx-a11y/no-static-element-interactions":["off"],
-    "no-useless-return":["off"]
+    "no-useless-return":["off"],
+    "no-constant-condition":"off"
   }
 }
