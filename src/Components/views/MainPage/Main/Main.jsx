@@ -8,44 +8,43 @@ import loading from '@/assets/images/loading.gif';
 const LazyImage = lazy(() => import('./LazyImage'));
 
 const Main = ({ list }) => {
-  const { posts, comments } = list;
+  const { posts } = list;
   return (
     <main>
       <section>
         <Styled.LayOut>
           <Styled.ListBox>
-            {posts.map(({ id, title, body, createdAt, thumbnail }) => (
-              <Styled.Item key={id}>
-                <Link to={`/post/${id}`}>
-                  <Styled.ImgBox>
-                    <Suspense fallback={<img src={loading} alt="loading" />}>
-                      <LazyImage thumbnail={thumbnail} />
-                    </Suspense>
-                  </Styled.ImgBox>
-                </Link>
-                <Styled.ContentBox>
+            {posts.map(
+              ({ id, title, body, createdAt, thumbnail, totalResults }) => (
+                <Styled.Item key={id}>
                   <Link to={`/post/${id}`}>
-                    <h4>{title}</h4>
-                    <div>
-                      <p>{htmlRemove(body)}</p>
-                    </div>
+                    <Styled.ImgBox>
+                      <Suspense fallback={<img src={loading} alt="loading" />}>
+                        <LazyImage thumbnail={thumbnail} />
+                      </Suspense>
+                    </Styled.ImgBox>
                   </Link>
-                  <div>
-                    <span>{makeYYMMDD(createdAt)}</span>
-                    <span>·</span>
-                    <span>{commentsCount(id, comments)}개의 댓글</span>
-                  </div>
-                </Styled.ContentBox>
-              </Styled.Item>
-            ))}
+                  <Styled.ContentBox>
+                    <Link to={`/post/${id}`}>
+                      <h4>{title}</h4>
+                      <div>
+                        <p>{htmlRemove(body)}</p>
+                      </div>
+                    </Link>
+                    <div>
+                      <span>{makeYYMMDD(createdAt)}</span>
+                      <span>·</span>
+                      <span>{totalResults}개의 댓글</span>
+                    </div>
+                  </Styled.ContentBox>
+                </Styled.Item>
+              )
+            )}
           </Styled.ListBox>
         </Styled.LayOut>
       </section>
     </main>
   );
 };
-
-const commentsCount = (id, comments) =>
-  comments.filter(comment => comment.postId === id).length;
 
 export default Main;
