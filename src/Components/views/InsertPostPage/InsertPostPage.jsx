@@ -16,49 +16,104 @@ import s3Upload from '@/utils/s3Upload';
 
 const KEY_ENUM = {
   enter: 'Enter',
+  backspace: 'Backspace',
+  comma: 'Comma',
 };
 const TITLE_MAX_NEW_LINE = 5;
 const TITLE_MAX_TEXT = 30;
 const TAGS_MAX_COUNT = 7;
+const TAGS_MAX_LENGTH = 20;
 
 function InsertPostPage() {
   const history = useHistory();
   const [form, setForm] = useState({});
   const [textAreaHeight, setTextAreaHeight] = useState(0);
   const [textAreaWidth, setTextAreaWidth] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isThumbOpen, setIsThumbOpen] = useState(false);
   const textareaRef = useRef(null);
   const tagInputRef = useRef(null);
   const { tags, title, file } = form;
 
-  // 태그 제거
-  const tagRemove = e => {
-    const { textContent } = e.target;
-    const { tags } = form;
-    if (tags.delete(textContent)) {
-      setForm(prev => ({ ...prev, tags: new Set([...tags]) }));
-    }
-  };
+  // 태그 클릭시 제거
+  const tagClick = useCallback(
+    e => {
+      const { textContent } = e.target;
+      const { tags } = form;
+      if (tags.delete(textContent)) {
+        setForm(prev => ({ ...prev, tags: new Set([...tags]) }));
+      }
+    },
+    [form]
+  );
+
+  // 태그 쉼표 등록 및 백스페이스 제거
+  const handlekeyDown = useCallback(() => {
+    let timer;
+    return e => {
+      const { code, target } = e;
+      const { id, value } = target;
+      if (code === KEY_ENUM.backspace) {
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
+          setForm(prev => {
+            const { tags } = prev;
+            if (tags && tags.size !== 0 && tagInputRef.current.value === '') {
+              return {
+                ...prev,
+                tags: new Set([...tags].slice(0, tags.size - 1)),
+              };
+            }
+            return prev;
+          });
+        }, 200);
+      }
+
+      if (code === KEY_ENUM.comma) {
+        // 입력으로 들어온 콤마 무효 시키기
+        e.preventDefault();
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
+          setForm(prev => {
+            if (value === '') return prev;
+            if (!prev[`${id}`]) return { ...prev, [`${id}`]: new Set([value]) };
+            if (prev[`${id}`].has(value)) return prev;
+            if (prev[`${id}`].size === TAGS_MAX_COUNT) return prev;
+            if (value.length > TAGS_MAX_LENGTH) return prev;
+            const tags = new Set([...prev[`${id}`], value]);
+            return { ...prev, [`${id}`]: tags };
+          });
+          tagInputRef.current.value = '';
+        }, 200);
+      }
+    };
+  }, []);
 
   // 태그 등록
-  const handlekeyPress = useCallback(e => {
-    const { code, target } = e;
-    if (code === KEY_ENUM.enter && target.id === 'tags') {
-      e.preventDefault();
-      const { id, value } = target;
-      setForm(prev => {
-        if (value === '') return prev;
-        // 첫 등록
-        if (!prev[`${id}`]) return { ...prev, [`${id}`]: new Set([value]) };
-        // 동일한 내용이 있다면 태그 추가를 안합니다.
-        if (prev[`${id}`].has(value)) return prev;
-        // 태그 갯수 조절.
-        if (prev[`${id}`].size === TAGS_MAX_COUNT) return prev;
-        const tags = new Set([...prev[`${id}`], value]);
-        return { ...prev, [`${id}`]: tags };
-      });
-      tagInputRef.current.value = '';
-    }
+  const handlekeyPress = useCallback(() => {
+    let timer;
+    return e => {
+      const { code, target } = e;
+      if (code === KEY_ENUM.enter) {
+        e.preventDefault();
+        const { id, value } = target;
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
+          setForm(prev => {
+            if (value === '') return prev;
+            // 첫 등록
+            if (!prev[`${id}`]) return { ...prev, [`${id}`]: new Set([value]) };
+            // 동일한 내용이 있다면 태그 추가를 안합니다.
+            if (prev[`${id}`].has(value)) return prev;
+            // 태그 갯수 조절.
+            if (prev[`${id}`].size === TAGS_MAX_COUNT) return prev;
+            if (value.length > TAGS_MAX_LENGTH) return prev;
+            const tags = new Set([...prev[`${id}`], value]);
+            return { ...prev, [`${id}`]: tags };
+          });
+          tagInputRef.current.value = '';
+        }, 200);
+      }
+    };
   }, []);
 
   // 타이틀 입력
@@ -153,7 +208,7 @@ function InsertPostPage() {
   );
 
   // 썸네일 모달 오픈
-  const thumbModalOpne = () => setIsOpen(true);
+  const thumbModalOpne = () => setIsThumbOpen(true);
 
   // 리사이즈
   useLayoutEffect(() => {
@@ -180,6 +235,8 @@ function InsertPostPage() {
     return () => window.removeEventListener('resize', eventHandler);
   }, []);
 
+  const goBack = useCallback(() => history.goBack(), [history]);
+
   const messages = useMemo(
     () => [
       <>
@@ -192,15 +249,14 @@ function InsertPostPage() {
     ],
     []
   );
-
   return (
     <>
-      <Write onSubmit={handleSubmit} onKeyPress={handlekeyPress}>
-        {isOpen && (
+      <Write onSubmit={handleSubmit}>
+        {isThumbOpen && (
           <Thumb
             file={file}
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
+            isOpen={isThumbOpen}
+            setIsOpen={setIsThumbOpen}
             s3Fileupload={s3Fileupload}
           />
         )}
@@ -219,7 +275,7 @@ function InsertPostPage() {
           <Styled.TagBox>
             {tags &&
               [...tags].map((tag, idx) => (
-                <Styled.Tag key={idx} onClick={tagRemove}>
+                <Styled.Tag key={idx} onClick={tagClick}>
                   {tag}
                 </Styled.Tag>
               ))}
@@ -229,6 +285,8 @@ function InsertPostPage() {
               placeholder="태그를 입력해주세요."
               ref={tagInputRef}
               autoComplete="off"
+              onKeyDown={handlekeyDown()}
+              onKeyPress={handlekeyPress()}
             />
 
             <Styled.InputMessage>
@@ -243,7 +301,7 @@ function InsertPostPage() {
           style={{ width: textAreaWidth > 767 ? `${textAreaWidth}px` : `auto` }}
         >
           <div>
-            <Styled.Button type="button" onClick={() => history.goBack()}>
+            <Styled.Button type="button" onClick={goBack}>
               <svg
                 stroke="currentColor"
                 fill="currentColor"
