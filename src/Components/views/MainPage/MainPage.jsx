@@ -4,6 +4,7 @@ import * as comments from '@/api/comments';
 import Main from './Main/Main';
 import Menu from './Menu/Menu';
 import * as Styled from './Main/style';
+import instance from '@/api/http';
 
 function MainPage() {
   const crrentLink = useRef(null);
@@ -30,16 +31,21 @@ function MainPage() {
   };
 
   useEffect(() => {
+    const getComments = async postId => comments.get({ postId });
     (async () => {
       try {
-        const promises = [posts.get(), comments.get()];
-        const [postsResponse, commentsResponse] = await Promise.all(promises);
-        setList({
-          posts: postsResponse.data.results,
-          comments: commentsResponse.data.results,
-        });
+        const postsResponse = await posts.get();
+        const { results } = postsResponse.data;
+        const commentsPromises = results.map(result => getComments(result.id));
+        const commentsResponse = await Promise.all(commentsPromises);
+        const newPosts = results.map((result, idx) => ({
+          ...result,
+          totalResults: commentsResponse[idx].data.totalResults,
+        }));
+        setList({ posts: newPosts });
       } catch (error) {
         // 모달 창 작업 해야된다.
+        console.log(error);
         alert('서버에러');
       }
     })();
