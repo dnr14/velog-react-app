@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { makeYYMMDD } from '@/utils/dateUtil';
-import { htmlRemove } from '@/utils/editorUtil';
+import { htmlRemove, decodeEntities } from '@/utils/editorUtil';
 import * as Styled from './style';
 import loading from '@/assets/images/loading.gif';
 
@@ -26,7 +26,7 @@ const Main = ({ list }) => {
                   </Link>
                   <Styled.ContentBox>
                     <Link to={`/post/${id}`}>
-                      <h4>{title}</h4>
+                      <h4>{decodeEntities(title)}</h4>
                       <div>
                         <p>{htmlRemove(body)}</p>
                       </div>

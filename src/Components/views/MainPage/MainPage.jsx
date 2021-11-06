@@ -4,7 +4,6 @@ import * as comments from '@/api/comments';
 import Main from './Main/Main';
 import Menu from './Menu/Menu';
 import * as Styled from './Main/style';
-import instance from '@/api/http';
 
 function MainPage() {
   const crrentLink = useRef(null);
@@ -31,12 +30,13 @@ function MainPage() {
   };
 
   useEffect(() => {
-    const getComments = async postId => comments.get({ postId });
     (async () => {
       try {
         const postsResponse = await posts.get();
         const { results } = postsResponse.data;
-        const commentsPromises = results.map(result => getComments(result.id));
+        const commentsPromises = results.map(result =>
+          comments.get({ postId: result.id })
+        );
         const commentsResponse = await Promise.all(commentsPromises);
         const newPosts = results.map((result, idx) => ({
           ...result,
