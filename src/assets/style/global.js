@@ -48,6 +48,7 @@ a {
 
 .ck-editor__editable_inline {
     min-height: 500px;
+    margin-bottom: 100px;
 }
 
 `;

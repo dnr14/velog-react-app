@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { useParams, withRouter } from 'react-router-dom';
 import * as Styled from './style';
 import { makeYYMMDD } from '@/utils/dateUtil';
@@ -117,8 +118,9 @@ function PostPage(props) {
             </div>
             <div className="postBody">
               <Styled.PostContent>
-                <div
-                  style={{ lineHeight: '1.5' }}
+                {/* ck-content를 넣어줘야 root에 설정된 css가 적용된다. */}
+                <CKContent
+                  className="ck-content"
                   dangerouslySetInnerHTML={{
                     __html: decodeEntities(Post.body),
                   }}
@@ -165,5 +167,13 @@ function PostPage(props) {
     </>
   );
 }
+
+const CKContent = styled.div`
+  &::after {
+    content: '';
+    clear: both;
+    display: block;
+  }
+`;
 
 export default withRouter(PostPage);
