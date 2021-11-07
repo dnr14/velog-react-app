@@ -18,10 +18,9 @@ function PostPage(props) {
       setPost(res.data);
     });
 
-    instance.get('/comments', { params: { limit: 10000 } }).then(res => {
+    instance.get('/comments', { params: { postId: id } }).then(res => {
       const arr = res.data.results.filter(data => data.postId === id);
       setComments(arr);
-      console.log(res.data);
     });
   }, []);
 
