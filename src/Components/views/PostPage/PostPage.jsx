@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import { useParams, withRouter } from 'react-router-dom';
 import * as Styled from './style';
 import { makeYYMMDD } from '@/utils/dateUtil';
 import instance from '@/api/http';
 import Commnet from './Comment/Comment';
 import PostModal from './PostModal/PostModal';
+import { decodeEntities } from '@/utils/editorUtil';
 
 function PostPage(props) {
   const [OpenModal, setOpenModal] = useState(false);
@@ -91,7 +93,7 @@ function PostPage(props) {
         {Post ? (
           <div className="post">
             <div className="postHeader" style={{ marginBottom: '40px' }}>
-              <Styled.PostTitle>{Post.title}</Styled.PostTitle>
+              <Styled.PostTitle>{decodeEntities(Post.title)}</Styled.PostTitle>
               <div
                 className="postInfo"
                 style={{ display: 'flex', justifyContent: 'space-between' }}
@@ -115,14 +117,13 @@ function PostPage(props) {
             </div>
             <div className="postBody">
               <Styled.PostContent>
-                <p style={{ lineHeight: '1.5' }}>
-                  {Post.body.split('\n').map((line, idx) => (
-                    <span key={idx}>
-                      {line}
-                      <br />
-                    </span>
-                  ))}
-                </p>
+                {/* ck-content를 넣어줘야 root에 설정된 css가 적용된다. */}
+                <CKContent
+                  className="ck-content"
+                  dangerouslySetInnerHTML={{
+                    __html: decodeEntities(Post.body),
+                  }}
+                />
               </Styled.PostContent>
             </div>
             <div className="postComments" style={postCommentStyle}>
@@ -165,5 +166,13 @@ function PostPage(props) {
     </>
   );
 }
+
+const CKContent = styled.div`
+  &::after {
+    content: '';
+    clear: both;
+    display: block;
+  }
+`;
 
 export default withRouter(PostPage);

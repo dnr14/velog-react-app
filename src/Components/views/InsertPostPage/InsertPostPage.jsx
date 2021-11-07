@@ -1,11 +1,10 @@
-import React, {
-  useCallback,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  insertTransientStorageAddAction,
+  insertTransientStorageRemoveAction,
+} from '@/modules/insertTransientStorage';
 import { newlineCount } from '@/utils/textUtil';
 import Write from './Write/Write';
 import * as Styled from './Write/style';
@@ -13,26 +12,33 @@ import * as posts from '@/api/posts';
 import CoustomEditor from './Editor/CoustomEditor';
 import Thumb from './Thumb/Thumb';
 import s3Upload from '@/utils/s3Upload';
+import Modal from './Modal/Modal';
+import useResize from '@/hooks/useResize';
 
 const KEY_ENUM = {
   enter: 'Enter',
   backspace: 'Backspace',
   comma: 'Comma',
 };
-const TITLE_MAX_NEW_LINE = 5;
-const TITLE_MAX_TEXT = 30;
+const TITLE_MAX_NEW_LINE = 10;
+const TITLE_MAX_TEXT = 50;
 const TAGS_MAX_COUNT = 7;
 const TAGS_MAX_LENGTH = 20;
 
 function InsertPostPage() {
   const history = useHistory();
   const [form, setForm] = useState({});
-  const [textAreaHeight, setTextAreaHeight] = useState(0);
-  const [textAreaWidth, setTextAreaWidth] = useState(0);
   const [isThumbOpen, setIsThumbOpen] = useState(false);
-  const textareaRef = useRef(null);
-  const tagInputRef = useRef(null);
-  const { tags, title, file } = form;
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalCloseDelay, setModalCloseDelay] = useState(3000);
+  const transientStorageState = useSelector(
+    ({ insertTransientStorage }) => insertTransientStorage
+  );
+  const dispatch = useDispatch();
+  const [modalMessage, setModalMessage] = useState('');
+  const { textAreaHeight, textAreaWidth, textareaRef, tagInputRef } =
+    useResize();
+  const { tags, title, file, body } = form;
 
   // 태그 클릭시 제거
   const tagClick = useCallback(
@@ -86,7 +92,7 @@ function InsertPostPage() {
         }, 200);
       }
     };
-  }, []);
+  }, [tagInputRef]);
 
   // 태그 등록
   const handlekeyPress = useCallback(() => {
@@ -114,7 +120,7 @@ function InsertPostPage() {
         }, 200);
       }
     };
-  }, []);
+  }, [tagInputRef]);
 
   // 타이틀 입력
   const handleChange = useCallback(e => {
@@ -174,6 +180,7 @@ function InsertPostPage() {
     }
   };
 
+  // 게시글 등록
   const handleSubmit = useCallback(
     async e => {
       e.preventDefault();
@@ -194,47 +201,56 @@ function InsertPostPage() {
           });
           const { data } = response;
           if (data) {
-            history.push('/');
+            setModalCloseDelay(1500);
+            setIsModalOpen(true);
+            setModalMessage(
+              <div className="green">
+                <span>게시글이 등록 되었습니다.</span>
+              </div>
+            );
+            dispatch(insertTransientStorageRemoveAction());
+            setTimeout(() => history.push('/'), 2000);
           }
         } catch (error) {
-          alert('서버에러');
-          throw error;
+          setIsModalOpen(true);
+          setModalMessage(
+            <div className="red">
+              <span>서버에서 오류 발생 잠시 후 다시 해주세요.</span>
+            </div>
+          );
         }
       } else {
-        alert('타이틀 내용을 입력해주세요.');
+        setIsModalOpen(true);
+        setModalMessage(
+          <div className="red">
+            <span>타이틀, 내용은 필수 입니다.</span>
+          </div>
+        );
       }
     },
-    [form, history]
+    [form, history, dispatch]
   );
+  // 임시 등록
+  const 임시등록 = () => {
+    dispatch(
+      insertTransientStorageAddAction({
+        title,
+        body,
+        tags: [...tags],
+      })
+    );
+    setModalMessage(
+      <div className="green">
+        <span>임시등록 되었습니다.</span>
+      </div>
+    );
+    setIsModalOpen(true);
+  };
 
   // 썸네일 모달 오픈
-  const thumbModalOpne = () => setIsThumbOpen(true);
+  const thumbModalOpen = () => setIsThumbOpen(true);
 
-  // 리사이즈
-  useLayoutEffect(() => {
-    let timer;
-    let eventHandler;
-    const throttling = (cb, delay) => {
-      eventHandler = () => {
-        if (timer) return;
-        timer = setTimeout(() => {
-          cb();
-          timer = null;
-        }, delay);
-      };
-      return eventHandler;
-    };
-
-    function resize() {
-      const currentH = window.innerWidth > 767 ? 66 : 43;
-      setTextAreaWidth(textareaRef.current.clientWidth);
-      setTextAreaHeight(currentH);
-    }
-    resize();
-    window.addEventListener('resize', throttling(resize, 200));
-    return () => window.removeEventListener('resize', eventHandler);
-  }, []);
-
+  // 뒤로가기
   const goBack = useCallback(() => history.goBack(), [history]);
 
   const messages = useMemo(
@@ -249,6 +265,19 @@ function InsertPostPage() {
     ],
     []
   );
+
+  // 임시저장하고 다시 새로 등록 들어왔을때 form 초기화
+  useEffect(() => {
+    if (transientStorageState.data) {
+      const { data } = transientStorageState;
+      setForm(prev => ({
+        ...prev,
+        ...data,
+        tags: new Set([...data.tags]),
+      }));
+    }
+  }, [transientStorageState]);
+
   return (
     <>
       <Write onSubmit={handleSubmit}>
@@ -259,6 +288,15 @@ function InsertPostPage() {
             setIsOpen={setIsThumbOpen}
             s3Fileupload={s3Fileupload}
           />
+        )}
+        {isModalOpen && (
+          <Modal
+            isOpen={isModalOpen}
+            setIsOpen={setIsModalOpen}
+            closeDelay={modalCloseDelay}
+          >
+            {modalMessage}
+          </Modal>
         )}
         <Styled.Title>
           <textarea
@@ -295,7 +333,10 @@ function InsertPostPage() {
           </Styled.TagBox>
         </Styled.Title>
         <Styled.Body>
-          <CoustomEditor onChange={ckEditorChange} />
+          <CoustomEditor
+            onChange={ckEditorChange}
+            data={transientStorageState.data.body}
+          />
         </Styled.Body>
         <Styled.ButtonBox
           style={{ width: textAreaWidth > 767 ? `${textAreaWidth}px` : `auto` }}
@@ -316,13 +357,13 @@ function InsertPostPage() {
               나가기
             </Styled.Button>
             <div>
-              <Styled.Button type="button" color="lightGray">
+              <Styled.Button type="button" color="lightGray" onClick={임시등록}>
                 임시저장
               </Styled.Button>
               <Styled.Button
                 type="button"
                 color="teal"
-                onClick={thumbModalOpne}
+                onClick={thumbModalOpen}
               >
                 출간하기
               </Styled.Button>

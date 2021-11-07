@@ -97,6 +97,35 @@ const editorConfiguration = {
     type: ['JPEG', 'JPG', 'GIF', 'PNG'],
   },
 
+  heading: {
+    options: [
+      {
+        model: 'paragraph',
+        view: 'p',
+        title: '본문',
+        class: 'ck-heading_paragraph',
+      },
+      {
+        model: 'heading1',
+        view: 'h1',
+        title: '헤더1',
+        class: 'ck-heading_heading1',
+      },
+      {
+        model: 'heading2',
+        view: 'h2',
+        title: '헤더2',
+        class: 'ck-heading_heading2',
+      },
+      {
+        model: 'heading3',
+        view: 'h3',
+        title: '헤더3',
+        class: 'ck-heading_heading3',
+      },
+    ],
+  },
+
   placeholder: '당신이 이야기를 적어주세요.',
 };
 

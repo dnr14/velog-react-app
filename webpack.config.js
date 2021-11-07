@@ -121,6 +121,8 @@ module.exports = {
     new webpack.DefinePlugin({
       API_KEY: JSON.stringify(apiKey),
       BUCKET: JSON.stringify(bucket),
+      // product develop 자동으로 주입되도록 수정해야된다.
+      NODE_ENV: JSON.stringify('development'),
     }),
     new CopyPlugin({
       patterns: [{ from: 'public/static/' }],

@@ -110,6 +110,7 @@ export const Title = styled.div`
   padding-top: 2rem;
   padding-left: 3rem;
   padding-right: 3rem;
+  transition: all 0.5s;
 
   & > textarea {
     display: block;
