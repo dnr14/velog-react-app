@@ -1,11 +1,10 @@
-import React, {
-  useCallback,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  insertTransientStorageAddAction,
+  insertTransientStorageRemoveAction,
+} from '@/modules/insertTransientStorage';
 import { newlineCount } from '@/utils/textUtil';
 import Write from './Write/Write';
 import * as Styled from './Write/style';
@@ -21,8 +20,8 @@ const KEY_ENUM = {
   backspace: 'Backspace',
   comma: 'Comma',
 };
-const TITLE_MAX_NEW_LINE = 5;
-const TITLE_MAX_TEXT = 30;
+const TITLE_MAX_NEW_LINE = 10;
+const TITLE_MAX_TEXT = 50;
 const TAGS_MAX_COUNT = 7;
 const TAGS_MAX_LENGTH = 20;
 
@@ -32,10 +31,14 @@ function InsertPostPage() {
   const [isThumbOpen, setIsThumbOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalCloseDelay, setModalCloseDelay] = useState(3000);
+  const transientStorageState = useSelector(
+    ({ insertTransientStorage }) => insertTransientStorage
+  );
+  const dispatch = useDispatch();
   const [modalMessage, setModalMessage] = useState('');
   const { textAreaHeight, textAreaWidth, textareaRef, tagInputRef } =
     useResize();
-  const { tags, title, file } = form;
+  const { tags, title, file, body } = form;
 
   // 태그 클릭시 제거
   const tagClick = useCallback(
@@ -205,6 +208,7 @@ function InsertPostPage() {
                 <span>게시글이 등록 되었습니다.</span>
               </div>
             );
+            dispatch(insertTransientStorageRemoveAction());
             setTimeout(() => history.push('/'), 2000);
           }
         } catch (error) {
@@ -224,8 +228,24 @@ function InsertPostPage() {
         );
       }
     },
-    [form, history]
+    [form, history, dispatch]
   );
+  // 임시 등록
+  const 임시등록 = () => {
+    dispatch(
+      insertTransientStorageAddAction({
+        title,
+        body,
+        tags: [...tags],
+      })
+    );
+    setModalMessage(
+      <div className="green">
+        <span>임시등록 되었습니다.</span>
+      </div>
+    );
+    setIsModalOpen(true);
+  };
 
   // 썸네일 모달 오픈
   const thumbModalOpen = () => setIsThumbOpen(true);
@@ -245,6 +265,19 @@ function InsertPostPage() {
     ],
     []
   );
+
+  // 임시저장하고 다시 새로 등록 들어왔을때 form 초기화
+  useEffect(() => {
+    if (transientStorageState.data) {
+      const { data } = transientStorageState;
+      setForm(prev => ({
+        ...prev,
+        ...data,
+        tags: new Set([...data.tags]),
+      }));
+    }
+  }, [transientStorageState]);
+
   return (
     <>
       <Write onSubmit={handleSubmit}>
@@ -300,7 +333,10 @@ function InsertPostPage() {
           </Styled.TagBox>
         </Styled.Title>
         <Styled.Body>
-          <CoustomEditor onChange={ckEditorChange} />
+          <CoustomEditor
+            onChange={ckEditorChange}
+            data={transientStorageState.data.body}
+          />
         </Styled.Body>
         <Styled.ButtonBox
           style={{ width: textAreaWidth > 767 ? `${textAreaWidth}px` : `auto` }}
@@ -321,7 +357,7 @@ function InsertPostPage() {
               나가기
             </Styled.Button>
             <div>
-              <Styled.Button type="button" color="lightGray">
+              <Styled.Button type="button" color="lightGray" onClick={임시등록}>
                 임시저장
               </Styled.Button>
               <Styled.Button
