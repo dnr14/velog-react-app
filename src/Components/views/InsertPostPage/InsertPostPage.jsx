@@ -6,14 +6,14 @@ import {
   insertTransientStorageRemoveAction,
 } from '@/modules/insertTransientStorage';
 import { newlineCount } from '@/utils/textUtil';
-import Write from './Write/Write';
-import * as Styled from './Write/style';
+import Write from '@/Components/views/InsertPostPage/Write/Write';
+import * as Styled from '@/Components/views/InsertPostPage/Write/style';
+import CoustomEditor from '@/Components/views/InsertPostPage/Editor/CoustomEditor';
+import Thumb from '@/Components/views/InsertPostPage/Thumb/Thumb';
+import Modal from '@/Components/views/InsertPostPage/Modal/Modal';
 import * as posts from '@/api/posts';
-import CoustomEditor from './Editor/CoustomEditor';
-import Thumb from './Thumb/Thumb';
-import s3Upload from '@/utils/s3Upload';
-import Modal from './Modal/Modal';
 import useResize from '@/hooks/useResize';
+import s3Upload from '@/utils/s3Upload';
 
 const KEY_ENUM = {
   enter: 'Enter',
@@ -168,7 +168,7 @@ function InsertPostPage() {
           ...prev,
           file: {
             resource: file,
-            base64: result,
+            path: result,
           },
         }));
       } catch (error) {
@@ -231,7 +231,7 @@ function InsertPostPage() {
     [form, history, dispatch]
   );
   // 임시 등록
-  const 임시등록 = () => {
+  const handleTransientStorage = () => {
     dispatch(
       insertTransientStorageAddAction({
         title,
@@ -357,7 +357,11 @@ function InsertPostPage() {
               나가기
             </Styled.Button>
             <div>
-              <Styled.Button type="button" color="lightGray" onClick={임시등록}>
+              <Styled.Button
+                type="button"
+                color="lightGray"
+                onClick={handleTransientStorage}
+              >
                 임시저장
               </Styled.Button>
               <Styled.Button

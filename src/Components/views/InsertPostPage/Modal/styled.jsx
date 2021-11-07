@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components';
 
 export const ModalContainer = styled.div`
   position: fixed;
+  top: 5%;
   color: white;
   right: 5%;
   cursor: pointer;
