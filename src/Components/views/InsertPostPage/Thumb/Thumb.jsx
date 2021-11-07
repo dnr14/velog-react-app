@@ -51,7 +51,7 @@ const Thumb = ({ file, isOpen, setIsOpen, s3Fileupload }) => {
                 <div>
                   <Styled.ImageBox>
                     {file ? (
-                      <img src={file.base64} alt="img" />
+                      <img src={file.path} alt="img" />
                     ) : (
                       <>
                         <svg
