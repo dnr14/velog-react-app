@@ -13,6 +13,8 @@ import * as posts from '@/api/posts';
 import CoustomEditor from './Editor/CoustomEditor';
 import Thumb from './Thumb/Thumb';
 import s3Upload from '@/utils/s3Upload';
+import Modal from './Modal/Modal';
+import useResize from '@/hooks/useResize';
 
 const KEY_ENUM = {
   enter: 'Enter',
@@ -27,11 +29,12 @@ const TAGS_MAX_LENGTH = 20;
 function InsertPostPage() {
   const history = useHistory();
   const [form, setForm] = useState({});
-  const [textAreaHeight, setTextAreaHeight] = useState(0);
-  const [textAreaWidth, setTextAreaWidth] = useState(0);
   const [isThumbOpen, setIsThumbOpen] = useState(false);
-  const textareaRef = useRef(null);
-  const tagInputRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalCloseDelay, setModalCloseDelay] = useState(3000);
+  const [modalMessage, setModalMessage] = useState('');
+  const { textAreaHeight, textAreaWidth, textareaRef, tagInputRef } =
+    useResize();
   const { tags, title, file } = form;
 
   // 태그 클릭시 제거
@@ -86,7 +89,7 @@ function InsertPostPage() {
         }, 200);
       }
     };
-  }, []);
+  }, [tagInputRef]);
 
   // 태그 등록
   const handlekeyPress = useCallback(() => {
@@ -114,7 +117,7 @@ function InsertPostPage() {
         }, 200);
       }
     };
-  }, []);
+  }, [tagInputRef]);
 
   // 타이틀 입력
   const handleChange = useCallback(e => {
@@ -174,6 +177,7 @@ function InsertPostPage() {
     }
   };
 
+  // 게시글 등록
   const handleSubmit = useCallback(
     async e => {
       e.preventDefault();
@@ -194,47 +198,39 @@ function InsertPostPage() {
           });
           const { data } = response;
           if (data) {
-            history.push('/');
+            setModalCloseDelay(1500);
+            setIsModalOpen(true);
+            setModalMessage(
+              <div className="green">
+                <span>게시글이 등록 되었습니다.</span>
+              </div>
+            );
+            setTimeout(() => history.push('/'), 2000);
           }
         } catch (error) {
-          alert('서버에러');
-          throw error;
+          setIsModalOpen(true);
+          setModalMessage(
+            <div className="red">
+              <span>서버에서 오류 발생 잠시 후 다시 해주세요.</span>
+            </div>
+          );
         }
       } else {
-        alert('타이틀 내용을 입력해주세요.');
+        setIsModalOpen(true);
+        setModalMessage(
+          <div className="red">
+            <span>타이틀, 내용은 필수 입니다.</span>
+          </div>
+        );
       }
     },
     [form, history]
   );
 
   // 썸네일 모달 오픈
-  const thumbModalOpne = () => setIsThumbOpen(true);
+  const thumbModalOpen = () => setIsThumbOpen(true);
 
-  // 리사이즈
-  useLayoutEffect(() => {
-    let timer;
-    let eventHandler;
-    const throttling = (cb, delay) => {
-      eventHandler = () => {
-        if (timer) return;
-        timer = setTimeout(() => {
-          cb();
-          timer = null;
-        }, delay);
-      };
-      return eventHandler;
-    };
-
-    function resize() {
-      const currentH = window.innerWidth > 767 ? 66 : 43;
-      setTextAreaWidth(textareaRef.current.clientWidth);
-      setTextAreaHeight(currentH);
-    }
-    resize();
-    window.addEventListener('resize', throttling(resize, 200));
-    return () => window.removeEventListener('resize', eventHandler);
-  }, []);
-
+  // 뒤로가기
   const goBack = useCallback(() => history.goBack(), [history]);
 
   const messages = useMemo(
@@ -259,6 +255,15 @@ function InsertPostPage() {
             setIsOpen={setIsThumbOpen}
             s3Fileupload={s3Fileupload}
           />
+        )}
+        {isModalOpen && (
+          <Modal
+            isOpen={isModalOpen}
+            setIsOpen={setIsModalOpen}
+            closeDelay={modalCloseDelay}
+          >
+            {modalMessage}
+          </Modal>
         )}
         <Styled.Title>
           <textarea
@@ -322,7 +327,7 @@ function InsertPostPage() {
               <Styled.Button
                 type="button"
                 color="teal"
-                onClick={thumbModalOpne}
+                onClick={thumbModalOpen}
               >
                 출간하기
               </Styled.Button>
