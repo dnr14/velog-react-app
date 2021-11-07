@@ -26,119 +26,120 @@ const RESOLVE = {
 };
 const ENTRY = './index.js';
 
-module.exports = {
-  mode: 'development',
-  entry: ENTRY,
-  resolve: RESOLVE,
+module.exports = (_, argv) => {
+  return {
+    entry: ENTRY,
+    resolve: RESOLVE,
 
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
-        options: {
-          presets: ['@babel/preset-react', '@babel/preset-env'],
-          plugins: ['@babel/plugin-transform-runtime', 'react-refresh/babel'],
+    module: {
+      rules: [
+        {
+          test: /\.(js|jsx)$/,
+          exclude: /node_modules/,
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-react', '@babel/preset-env'],
+            plugins: ['@babel/plugin-transform-runtime', 'react-refresh/babel'],
+          },
         },
-      },
 
-      {
-        test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader',
-            options: {
-              minimize: true,
-            },
-          },
-        ],
-      },
-      {
-        test: /\.(png|jpe?g|gif|svg|webp)$/i,
-        exclude: [
-          /\.(js|jsx|mjs)$/,
-          /\.html$/,
-          /\.json$/,
-          /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
-          /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css/,
-          path.resolve(__dirname, 'public/static/'),
-        ],
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              name: '[hash].[ext]',
-              limit: 1000,
-              publicPath,
-              outputPath: '/images',
-            },
-          },
-        ],
-      },
-      {
-        test: /\.css$/i,
-        exclude: [/ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css/],
-        use: ['css-loader'],
-      },
-      {
-        test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
-        use: [
-          {
-            loader: 'style-loader',
-            options: {
-              injectType: 'singletonStyleTag',
-              attributes: {
-                'data-cke': true,
+        {
+          test: /\.html$/,
+          use: [
+            {
+              loader: 'html-loader',
+              options: {
+                minimize: true,
               },
             },
-          },
-          {
-            loader: 'postcss-loader',
-            options: styles.getPostCssConfig({
-              themeImporter: {
-                themePath: require.resolve('@ckeditor/ckeditor5-theme-lark'),
+          ],
+        },
+        {
+          test: /\.(png|jpe?g|gif|svg|webp)$/i,
+          exclude: [
+            /\.(js|jsx|mjs)$/,
+            /\.html$/,
+            /\.json$/,
+            /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
+            /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css/,
+            path.resolve(__dirname, 'public/static/'),
+          ],
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                name: '[hash].[ext]',
+                limit: 1000,
+                publicPath,
+                outputPath: '/images',
               },
-              minify: true,
-            }),
-          },
-        ],
-      },
-      {
-        test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
-        use: ['raw-loader'],
-      },
+            },
+          ],
+        },
+        {
+          test: /\.css$/i,
+          exclude: [/ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css/],
+          use: ['css-loader'],
+        },
+        {
+          test: /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css$/,
+          use: [
+            {
+              loader: 'style-loader',
+              options: {
+                injectType: 'singletonStyleTag',
+                attributes: {
+                  'data-cke': true,
+                },
+              },
+            },
+            {
+              loader: 'postcss-loader',
+              options: styles.getPostCssConfig({
+                themeImporter: {
+                  themePath: require.resolve('@ckeditor/ckeditor5-theme-lark'),
+                },
+                minify: true,
+              }),
+            },
+          ],
+        },
+        {
+          test: /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
+          use: ['raw-loader'],
+        },
+      ],
+    },
+
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: './public/index.html',
+        favicon: './public/static/favicon.png',
+      }),
+      new CleanWebpackPlugin(),
+      new ReactRefreshWebpackPlugin(),
+      new webpack.DefinePlugin({
+        API_KEY: JSON.stringify(apiKey),
+        BUCKET: JSON.stringify(bucket),
+        NODE_ENV:
+          argv.mode === 'development' ? JSON.stringify('development') : '',
+      }),
+      new CopyPlugin({
+        patterns: [{ from: 'public/static/' }],
+      }),
     ],
-  },
 
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: './public/index.html',
-      favicon: './public/static/favicon.png',
-    }),
-    new CleanWebpackPlugin(),
-    new ReactRefreshWebpackPlugin(),
-    new webpack.DefinePlugin({
-      API_KEY: JSON.stringify(apiKey),
-      BUCKET: JSON.stringify(bucket),
-      // product develop 자동으로 주입되도록 수정해야된다.
-      NODE_ENV: JSON.stringify('development'),
-    }),
-    new CopyPlugin({
-      patterns: [{ from: 'public/static/' }],
-    }),
-  ],
+    output: {
+      filename: '[name].[hash].js',
+      path: path.join(__dirname, 'build'),
+      publicPath: '/',
+    },
 
-  output: {
-    filename: '[name].[hash].js',
-    path: path.join(__dirname, 'build'),
-    publicPath: '/',
-  },
-
-  devServer: {
-    port,
-    hot: true,
-    open: true,
-    historyApiFallback: true,
-  },
+    devServer: {
+      port,
+      hot: true,
+      open: true,
+      historyApiFallback: true,
+    },
+  };
 };
