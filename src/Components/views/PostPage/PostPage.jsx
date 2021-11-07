@@ -5,6 +5,7 @@ import { makeYYMMDD } from '@/utils/dateUtil';
 import instance from '@/api/http';
 import Commnet from './Comment/Comment';
 import PostModal from './PostModal/PostModal';
+import { decodeEntities } from '@/utils/editorUtil';
 
 function PostPage(props) {
   const [OpenModal, setOpenModal] = useState(false);
@@ -92,7 +93,7 @@ function PostPage(props) {
         {Post ? (
           <div className="post">
             <div className="postHeader" style={{ marginBottom: '40px' }}>
-              <Styled.PostTitle>{Post.title}</Styled.PostTitle>
+              <Styled.PostTitle>{decodeEntities(Post.title)}</Styled.PostTitle>
               <div
                 className="postInfo"
                 style={{ display: 'flex', justifyContent: 'space-between' }}
@@ -116,14 +117,12 @@ function PostPage(props) {
             </div>
             <div className="postBody">
               <Styled.PostContent>
-                <p style={{ lineHeight: '1.5' }}>
-                  {Post.body.split('\n').map((line, idx) => (
-                    <span key={idx}>
-                      {line}
-                      <br />
-                    </span>
-                  ))}
-                </p>
+                <div
+                  style={{ lineHeight: '1.5' }}
+                  dangerouslySetInnerHTML={{
+                    __html: decodeEntities(Post.body),
+                  }}
+                />
               </Styled.PostContent>
             </div>
             <div className="postComments" style={postCommentStyle}>
