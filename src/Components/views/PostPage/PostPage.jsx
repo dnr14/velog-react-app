@@ -120,6 +120,9 @@ function PostPage(props) {
                 {/* ck-content를 넣어줘야 root에 설정된 css가 적용된다. */}
                 <CKContent
                   className="ck-content"
+                  style={{
+                    wordBreak: 'break-all',
+                  }}
                   dangerouslySetInnerHTML={{
                     __html: decodeEntities(Post.body),
                   }}
