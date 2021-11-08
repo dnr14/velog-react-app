@@ -1,17 +1,10 @@
 import http from '@/api/http';
 
-export function get() {
-  return http.get(`/posts?sortBy=createdAt:desc`);
-}
+export const get = (limit = 20, page = 1) =>
+  http.get(`/posts?sortBy=createdAt:desc&limit=${limit}&page=${page}`);
 
-export function insert(data) {
-  return http.post(`/posts`, data);
-}
+export const insert = data => http.post(`/posts`, data);
 
-export function update(id, data) {
-  return http.patch(`/posts/${id}`, data);
-}
+export const update = (id, data) => http.patch(`/posts/${id}`, data);
 
-export function postsById(id) {
-  return http.get(`/posts/${id}`);
-}
+export const postsById = id => http.get(`/posts/${id}`);

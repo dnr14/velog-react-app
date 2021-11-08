@@ -1,16 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
+import Main from '@/Components/views/MainPage/Main/Main';
+import Menu from '@/Components/views/MainPage/Menu/Menu';
+import * as Styled from '@/Components/views/MainPage/Main/style';
 import * as posts from '@/api/posts';
-import * as comments from '@/api/comments';
-import Main from './Main/Main';
-import Menu from './Menu/Menu';
-import * as Styled from './Main/style';
+import Modal from '@/Components/views/InsertPostPage/Modal/Modal';
+import Loading from './Loading/Loading';
+import useObserver from '@/hooks/useObserver';
 
 function MainPage() {
   const crrentLink = useRef(null);
   const lineRef = useRef(null);
-  const [list, setList] = useState(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [isNoticeOpen, setIsNoticeOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+
+  const { observer, call, state, list } = useObserver();
+  const { loading, error } = state;
 
   const handleManubarClick = ({ currentTarget }) => {
     const { id } = currentTarget;
@@ -29,30 +35,31 @@ function MainPage() {
     }
   };
 
+  useEffect(() => call(() => posts.get()), [call]);
+
   useEffect(() => {
-    (async () => {
-      try {
-        const postsResponse = await posts.get();
-        const { results } = postsResponse.data;
-        const commentsPromises = results.map(result =>
-          comments.get({ postId: result.id })
-        );
-        const commentsResponse = await Promise.all(commentsPromises);
-        const newPosts = results.map((result, idx) => ({
-          ...result,
-          totalResults: commentsResponse[idx].data.totalResults,
-        }));
-        setList({ posts: newPosts });
-      } catch (error) {
-        // 모달 창 작업 해야된다.
-        console.log(error);
-        alert('서버에러');
-      }
-    })();
-  }, []);
+    if (error) {
+      setIsModalOpen(true);
+      setModalMessage(
+        <div className="red">
+          <span>서버에서 오류 발생 잠시 후 다시 해주세요.</span>
+        </div>
+      );
+    }
+  }, [error]);
 
   return (
     <>
+      <Loading loading={loading} />
+      {isModalOpen && (
+        <Modal
+          isOpen={isModalOpen}
+          setIsOpen={setIsModalOpen}
+          closeDelay={1500}
+        >
+          {modalMessage}
+        </Modal>
+      )}
       <Styled.Container>
         <Menu
           handleManubarClick={handleManubarClick}
@@ -63,7 +70,7 @@ function MainPage() {
           isSelectOpen={isSelectOpen}
           ref={[crrentLink, lineRef]}
         />
-        {list && <Main list={list} />}
+        {list && <Main list={list} observer={observer} />}
       </Styled.Container>
     </>
   );

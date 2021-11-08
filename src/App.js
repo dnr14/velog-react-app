@@ -5,6 +5,7 @@ import Top from './Components/views/Top/Top';
 import PostPage from './Components/views/PostPage/PostPage';
 import UpdatePostPage from './Components/views/UpdatePostPage/UpdatePostPage';
 import InsertPostPage from './Components/views/InsertPostPage/InsertPostPage';
+import NotFound from './Components/Error/NotFound';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
           <Route path="/posttest" component={PostPage} />
           <Route path="/insert" component={InsertPostPage} />
           <Route exact path="/" component={MainPage} />
+          <Route path="*" component={NotFound} />
         </Switch>
       </div>
     </BrowserRouter>

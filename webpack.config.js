@@ -18,7 +18,6 @@ const RESOLVE = {
   extensions: ['.js', '.jsx'],
   alias: {
     '@': path.resolve(__dirname, 'src/'),
-    'Components': path.resolve(__dirname, 'src/Components/views/'),
   },
   fallback: {
     util: require.resolve('util/'),
@@ -141,5 +140,6 @@ module.exports = (_, argv) => {
       open: true,
       historyApiFallback: true,
     },
+    devtool: 'eval-cheap-module-source-map',
   };
 };
