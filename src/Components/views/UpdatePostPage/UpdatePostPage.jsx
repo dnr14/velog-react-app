@@ -153,19 +153,8 @@ function UpdatePostPage() {
               tags: [...tags],
               thumbnail: '',
             });
-          }
-
-          if (file) {
-            if (file.path) {
-              response = await posts.update(id, {
-                title,
-                body,
-                tags: [...tags],
-                thumbnail: file.path,
-              });
-            }
-
-            if (file.resorce) {
+          } else if (file) {
+            if (file.resource) {
               const { resource } = file;
               const { Location } = await s3Upload(resource).promise();
               response = await posts.update(id, {
@@ -173,6 +162,13 @@ function UpdatePostPage() {
                 body,
                 thumbnail: Location,
                 tags: [...tags],
+              });
+            } else {
+              response = await posts.update(id, {
+                title,
+                body,
+                tags: [...tags],
+                thumbnail: file.path,
               });
             }
           }
@@ -190,6 +186,7 @@ function UpdatePostPage() {
             setTimeout(() => history.push('/'), 2000);
           }
         } catch (error) {
+          console.log(error);
           setIsModalOpen(true);
           setModalMessage(
             <div className="red">
@@ -315,7 +312,6 @@ function UpdatePostPage() {
             });
           }
         } catch (error) {
-          console.log(error);
           setIsModalOpen(true);
           setModalMessage(
             <div className="red">
