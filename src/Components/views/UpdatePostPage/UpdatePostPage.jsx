@@ -299,7 +299,8 @@ function UpdatePostPage() {
       } else {
         try {
           const response = await posts.postsById(id);
-          const { title, body, tags, thumbnail } = response.data;
+          const { data } = response;
+          const { title, body, tags, thumbnail } = data;
           result = {
             title,
             body: decodeEntities(body),
@@ -314,6 +315,7 @@ function UpdatePostPage() {
             });
           }
         } catch (error) {
+          console.log(error);
           setIsModalOpen(true);
           setModalMessage(
             <div className="red">
