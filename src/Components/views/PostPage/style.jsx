@@ -167,6 +167,7 @@ export const PostModal = styled.div`
 export const InnerModal = styled.div`
   width: 300px;
   padding: 32px 24px;
+  background-color: white;
   box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 12px;
   transition: all 600ms cubic-bezier(0.86, 0, 0.07, 1);
   transform: matrix(1, 0, 0, 1, 0, 0);
