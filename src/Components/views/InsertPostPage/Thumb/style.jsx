@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components';
 
 export const ThumbModal = styled.div`
   min-width: 350px;
-  background-color: black;
   display: flex;
   justify-content: center;
   align-items: center;

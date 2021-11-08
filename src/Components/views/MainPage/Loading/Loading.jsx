@@ -27,10 +27,10 @@ const StyledDiv = styled.div`
   left: 0;
 
   & > img {
-    width: 30%;
+    width: 15%;
     -webkit-user-drag: none;
     ${({ theme }) => theme.main.media.pc1} {
-      width: 50%;
+      width: 30%;
     }
   }
 `;
