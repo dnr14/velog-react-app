@@ -135,6 +135,7 @@ module.exports = (_, argv) => {
         BUCKET: JSON.stringify(bucket),
         NODE_ENV: JSON.stringify(nodeEnv),
       }),
+      new UglifyJSPlugin(),
     ],
 
     output: {
@@ -153,6 +154,6 @@ module.exports = (_, argv) => {
         publicPath,
       },
     },
-    devtool: 'eval-cheap-module-source-map',
+    // devtool: 'eval-cheap-module-source-map',
   };
 };

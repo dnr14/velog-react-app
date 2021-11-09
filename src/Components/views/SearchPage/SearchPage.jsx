@@ -76,7 +76,17 @@ const SearchPage = () => {
         call(async () => {
           setList(null);
           const { value } = target;
-          const response = await postsByKeyWord(keyWord, value);
+
+          let response;
+          if (keyWord === 'body') {
+            response = await postsByKeyWord(
+              keyWord,
+              encodeURIComponent(`&lt;p>${value}&lt;/p>`)
+            );
+          } else {
+            response = await postsByKeyWord(keyWord, encodeURIComponent(value));
+          }
+
           const { results, limit, page, totalPages, totalResults } =
             response.data;
           const newPosts = await getComments(results);
