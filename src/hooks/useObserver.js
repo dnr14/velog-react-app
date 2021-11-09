@@ -39,7 +39,18 @@ const useObserver = () => {
         }
 
         timer = setTimeout(
-          call(() => posts.get(currentLimit, currentPage + 1)),
+          call(async () => {
+            const postsResponse = await posts.get(
+              currentLimit,
+              currentPage + 1
+            );
+            const { results, page, totalPages, limit } = postsResponse.data;
+            const newPosts = await comments.getComments(results);
+            return {
+              posts: [...newPosts],
+              state: { page, totalPages, limit },
+            };
+          }),
           REQUEST_DELAY
         );
       }
@@ -49,19 +60,15 @@ const useObserver = () => {
 
   useEffect(() => {
     if (success) {
-      (async () => {
-        const { results, page, totalPages, limit } = success.data;
-        const newPosts = await comments.getComments(results);
-
-        setList(prev => {
-          const oldPosts = prev?.posts ?? [];
-          return {
-            posts: [...oldPosts, ...newPosts],
-            state: { page, totalPages, limit },
-          };
-        });
-        timer = null;
-      })();
+      const { state, posts } = success;
+      setList(prev => {
+        const oldPosts = prev?.posts ?? [];
+        return {
+          posts: [...oldPosts, ...posts],
+          state,
+        };
+      });
+      timer = null;
     }
   }, [success, setList]);
 
