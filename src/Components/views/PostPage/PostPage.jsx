@@ -13,6 +13,7 @@ function PostPage(props) {
   const [Post, setPost] = useState();
   const [Comments, setComments] = useState([]);
   const [InputComment, setInputComment] = useState('');
+  const [CommentFlag, setCommentFlag] = useState(false);
   const { id } = useParams();
 
   useEffect(() => {
@@ -20,10 +21,12 @@ function PostPage(props) {
       setPost(res.data);
     });
 
-    instance.get('/comments', { params: { postId: id } }).then(res => {
-      const arr = res.data.results.filter(data => data.postId === id);
-      setComments(arr);
-    });
+    instance
+      .get('/comments', { params: { postId: id, limit: 100 } })
+      .then(res => {
+        const arr = res.data.results.filter(data => data.postId === id);
+        setComments(arr);
+      });
   }, []);
 
   // Delete Post
@@ -46,7 +49,9 @@ function PostPage(props) {
 
   // Insert Comment
   const insertCommentHander = () => {
-    if (InputComment.length === 0) return;
+    if (InputComment.length === 0 || CommentFlag === true) return;
+
+    setCommentFlag(true);
 
     const variable = {
       postId: id,
@@ -57,6 +62,7 @@ function PostPage(props) {
     instance.post('/comments', variable).then(res => {
       setComments(Comments.concat(res.data));
       setInputComment('');
+      setCommentFlag(false);
     });
   };
 
