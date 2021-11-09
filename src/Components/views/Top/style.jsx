@@ -48,6 +48,34 @@ export const Logo = styled.div`
   }
 `;
 
+export const SearchBox = styled.div`
+  display: flex;
+  align-items: center;
+
+  & > a:first-child {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    outline: none;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 0.75rem;
+    & > svg {
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+    &:hover {
+      background: rgba(0, 0, 0, 0.043);
+    }
+  }
+`;
+
 export const InsertButton = styled.button`
   height: 2rem;
   padding-left: 1rem;

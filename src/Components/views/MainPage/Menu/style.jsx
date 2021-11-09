@@ -136,6 +136,11 @@ export const MenuBarWrraper = styled.div`
       font-size: 0.75rem;
     }
   }
+
+  .checked {
+    color: rgb(248, 249, 250);
+    background: rgb(18, 184, 134);
+  }
 `;
 
 export const UlWrapper = styled.ul`
