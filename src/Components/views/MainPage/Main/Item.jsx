@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import * as Styled from '@/Components/views/MainPage/Main/style';
 import { makeYYMMDD } from '@/utils/dateUtil';
 import { htmlRemove, decodeEntities } from '@/utils/editorUtil';
-import visibilityOff from '@/assets/images/visibilityOff.svg';
+import lazyLoading from '@/assets/images/lazyLoading.gif';
 
 const LazyImage = lazy(() => import('./LazyImage'));
 
@@ -19,7 +19,7 @@ const Item = ({
     <Styled.Item>
       <Link to={`/post/${id}`}>
         <Styled.ImgBox>
-          <Suspense fallback={<img src={visibilityOff} alt="noVisible" />}>
+          <Suspense fallback={<img src={lazyLoading} alt="lazyLoading" />}>
             <LazyImage thumbnail={thumbnail} />
           </Suspense>
         </Styled.ImgBox>

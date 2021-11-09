@@ -2,8 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
 const { styles } = require('@ckeditor/ckeditor5-dev-utils');
 const dotenv = require('dotenv');
 
@@ -12,7 +12,6 @@ dotenv.config();
 const apiKey = process.env.API_KEY || '';
 const bucket = process.env.BUCKET || '';
 const port = process.env.port || 3000;
-const publicPath = '/images';
 
 const RESOLVE = {
   extensions: ['.js', '.jsx'],
@@ -23,12 +22,27 @@ const RESOLVE = {
     util: require.resolve('util/'),
   },
 };
+
 const ENTRY = './index.js';
+const PRODUCTION = 'production';
+const DEVELOPMENT = 'development';
+const DEV_PUBLIC_PATH = '/';
+const PRODUCT_PUBLIC_PATH = '/build/';
 
 module.exports = (_, argv) => {
+  const publicPath =
+    argv.mode === PRODUCTION ? PRODUCT_PUBLIC_PATH : DEV_PUBLIC_PATH;
+  const nodeEnv = argv.mode === PRODUCTION ? PRODUCTION : DEVELOPMENT;
+  const plugins =
+    argv.mode === PRODUCTION
+      ? ['@babel/plugin-transform-runtime']
+      : ['@babel/plugin-transform-runtime', 'react-refresh/babel'];
+  const mode = argv.mode === PRODUCTION ? PRODUCTION : DEVELOPMENT;
+
   return {
     entry: ENTRY,
     resolve: RESOLVE,
+    mode,
 
     module: {
       rules: [
@@ -38,7 +52,7 @@ module.exports = (_, argv) => {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-react', '@babel/preset-env'],
-            plugins: ['@babel/plugin-transform-runtime', 'react-refresh/babel'],
+            plugins,
           },
         },
 
@@ -61,7 +75,6 @@ module.exports = (_, argv) => {
             /\.json$/,
             /ckeditor5-[^/\\]+[/\\]theme[/\\]icons[/\\][^/\\]+\.svg$/,
             /ckeditor5-[^/\\]+[/\\]theme[/\\].+\.css/,
-            path.resolve(__dirname, 'public/static/'),
           ],
           use: [
             {
@@ -69,7 +82,7 @@ module.exports = (_, argv) => {
               options: {
                 name: '[hash].[ext]',
                 limit: 1000,
-                publicPath,
+                publicPath: `${publicPath}images`,
                 outputPath: '/images',
               },
             },
@@ -113,25 +126,22 @@ module.exports = (_, argv) => {
     plugins: [
       new HtmlWebpackPlugin({
         template: './public/index.html',
-        favicon: './public/static/favicon.png',
+        favicon: `./public/static/favicon.png`,
       }),
       new CleanWebpackPlugin(),
       new ReactRefreshWebpackPlugin(),
       new webpack.DefinePlugin({
         API_KEY: JSON.stringify(apiKey),
         BUCKET: JSON.stringify(bucket),
-        NODE_ENV:
-          argv.mode === 'development' ? JSON.stringify('development') : '',
-      }),
-      new CopyPlugin({
-        patterns: [{ from: 'public/static/' }],
+        NODE_ENV: JSON.stringify(nodeEnv),
       }),
     ],
 
     output: {
       filename: '[name].[hash].js',
-      path: path.join(__dirname, 'build'),
-      publicPath: '/',
+      clean: true,
+      path: path.join(__dirname, '/build'),
+      publicPath,
     },
 
     devServer: {
@@ -139,6 +149,9 @@ module.exports = (_, argv) => {
       hot: true,
       open: true,
       historyApiFallback: true,
+      devMiddleware: {
+        publicPath,
+      },
     },
     devtool: 'eval-cheap-module-source-map',
   };

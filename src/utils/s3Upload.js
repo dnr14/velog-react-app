@@ -12,7 +12,7 @@ const s3Upload = file => {
   const upload = new AWS.S3.ManagedUpload({
     params: {
       Bucket: BUCKET,
-      Key: file.name,
+      Key: `file/${file.name}`,
       Body: file,
     },
   });

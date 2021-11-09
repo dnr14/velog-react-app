@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import NotFoundImg from '@/assets/images/404.png';
 
-const Container = styled.div``;
-
 const StyledDiv = styled.div`
   display: flex;
   position: fixed;
@@ -55,7 +53,8 @@ const NotFount = () => {
   return (
     <StyledDiv>
       <div>
-        <img src={NotFoundImg} alt="404" /> <span>NOT FOUND</span>
+        <img src={NotFoundImg} alt="404" />
+        <span>NOT FOUND</span>
       </div>
       <span>잘못 된 페이지입니다.</span>
       <Link to="/">
