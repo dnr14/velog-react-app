@@ -3,6 +3,7 @@ import Main from '@/Components/views/MainPage/Main/Main';
 import Menu from '@/Components/views/MainPage/Menu/Menu';
 import * as Styled from '@/Components/views/MainPage/Main/style';
 import * as posts from '@/api/posts';
+import * as comments from '@/api/comments';
 import Modal from '@/Components/views/InsertPostPage/Modal/Modal';
 import Loading from './Loading/Loading';
 import useObserver from '@/hooks/useObserver';
@@ -35,7 +36,19 @@ function MainPage() {
     }
   };
 
-  useEffect(() => call(() => posts.get()), [call]);
+  useEffect(
+    () =>
+      call(async () => {
+        const postsResponse = await posts.get();
+        const { results, page, totalPages, limit } = postsResponse.data;
+        const newPosts = await comments.getComments(results);
+        return {
+          posts: [...newPosts],
+          state: { page, totalPages, limit },
+        };
+      }),
+    [call]
+  );
 
   useEffect(() => {
     if (error) {
