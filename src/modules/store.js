@@ -1,5 +1,5 @@
 import logger from 'redux-logger';
-import { combineReducers, createStore, applyMiddleware } from 'redux';
+import { combineReducers, createStore, applyMiddleware, compose } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { insertTransientStorageReducer } from './insertTransientStorage';
 import { updateTransientStorageReducer } from './updateTransientStorage';
