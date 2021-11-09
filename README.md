@@ -1,5 +1,5 @@
-velog 클론 시작
+http://velogclone-project.s3-website.ap-northeast-2.amazonaws.com/
 
-- 게시글 상세페이지 출력
-- 댓글 불러오기, 수정, 삭제
-- 게시글 삭제
+FrontEnd : Html/Css, Styled Component, React
+Storage : aws s3
+Hosting : aws s3
