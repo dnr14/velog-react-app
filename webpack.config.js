@@ -8,10 +8,6 @@ const { styles } = require('@ckeditor/ckeditor5-dev-utils');
 const dotenv = require('dotenv');
 
 dotenv.config();
-// s3 api key와 버킷 이름 세팅
-const apiKey = process.env.API_KEY || '';
-const bucket = process.env.BUCKET || '';
-const port = process.env.port || 3000;
 
 const RESOLVE = {
   extensions: ['.js', '.jsx'],
@@ -28,6 +24,10 @@ const PRODUCTION = 'production';
 const DEVELOPMENT = 'development';
 const DEV_PUBLIC_PATH = '/';
 const PRODUCT_PUBLIC_PATH = '/build/';
+// s3 api key와 버킷 이름 세팅
+const apiKey = process.env.API_KEY || '';
+const bucket = process.env.BUCKET || '';
+const port = process.env.port || 3000;
 
 module.exports = (_, argv) => {
   const publicPath =
@@ -39,7 +39,16 @@ module.exports = (_, argv) => {
       : ['@babel/plugin-transform-runtime', 'react-refresh/babel'];
   const mode = argv.mode === PRODUCTION ? PRODUCTION : DEVELOPMENT;
 
-  return {
+  const htmlWebpackPluginConfig = {
+    template: './public/index.html',
+    favicon: `./public/static/favicon.png`,
+  };
+
+  if (argv.mode === PRODUCTION) {
+    htmlWebpackPluginConfig.filename = '../index.html';
+  }
+
+  const config = {
     entry: ENTRY,
     resolve: RESOLVE,
     mode,
@@ -124,10 +133,7 @@ module.exports = (_, argv) => {
     },
 
     plugins: [
-      new HtmlWebpackPlugin({
-        template: './public/index.html',
-        favicon: `./public/static/favicon.png`,
-      }),
+      new HtmlWebpackPlugin(htmlWebpackPluginConfig),
       new CleanWebpackPlugin(),
       new ReactRefreshWebpackPlugin(),
       new webpack.DefinePlugin({
@@ -141,7 +147,7 @@ module.exports = (_, argv) => {
     output: {
       filename: '[name].[hash].js',
       clean: true,
-      path: path.join(__dirname, '/build'),
+      path: path.join(__dirname, '/dist/build'),
       publicPath,
     },
 
@@ -154,6 +160,11 @@ module.exports = (_, argv) => {
         publicPath,
       },
     },
-    // devtool: 'eval-cheap-module-source-map',
   };
+
+  if (argv.mode === DEVELOPMENT) {
+    config.devtool = 'eval-cheap-module-source-map';
+  }
+
+  return config;
 };
