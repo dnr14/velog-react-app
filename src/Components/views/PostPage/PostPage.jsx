@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useParams, withRouter } from 'react-router-dom';
+import { sanitize } from 'dompurify';
 import * as Styled from './style';
 import { makeYYMMDD } from '@/utils/dateUtil';
 import instance from '@/api/http';
@@ -37,7 +38,6 @@ function PostPage(props) {
       );
       Promise.all(promises).then(values => {
         props.history.push('/');
-        console.log(values);
       });
     });
   };
@@ -162,7 +162,7 @@ function PostPage(props) {
                   <Commnet
                     key={idx}
                     comment={comment}
-                    deleteComment={deleteComment}
+                    deleteComment={sanitize(decodeEntities(Post.body))}
                   />
                 ))}
               </div>
