@@ -9,20 +9,9 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const RESOLVE = {
-  extensions: ['.js', '.jsx'],
-  alias: {
-    '@': path.resolve(__dirname, 'src/'),
-  },
-  fallback: {
-    util: require.resolve('util/'),
-  },
-};
-
-const ENTRY = './index.js';
+const DEV_PUBLIC_PATH = '/';
 const PRODUCTION = 'production';
 const DEVELOPMENT = 'development';
-const DEV_PUBLIC_PATH = '/';
 const PRODUCT_PUBLIC_PATH = '/build/';
 // s3 api key와 버킷 이름 세팅
 const apiKey = process.env.API_KEY || '';
@@ -49,10 +38,14 @@ module.exports = (_, argv) => {
   }
 
   const config = {
-    entry: ENTRY,
-    resolve: RESOLVE,
+    entry: './index.js',
+    output: {
+      filename: '[name].[chunkhash].js',
+      clean: true,
+      path: path.join(__dirname, '/dist/build'),
+      publicPath,
+    },
     mode,
-
     module: {
       rules: [
         {
@@ -60,7 +53,10 @@ module.exports = (_, argv) => {
           exclude: /node_modules/,
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-react', '@babel/preset-env'],
+            presets: [
+              '@babel/preset-react',
+              ['@babel/preset-env', { modules: false }],
+            ],
             plugins,
           },
         },
@@ -87,10 +83,9 @@ module.exports = (_, argv) => {
           ],
           use: [
             {
-              loader: 'url-loader',
+              loader: 'file-loader',
               options: {
                 name: '[hash].[ext]',
-                limit: 1000,
                 publicPath: `${publicPath}images`,
                 outputPath: '/images',
               },
@@ -144,11 +139,15 @@ module.exports = (_, argv) => {
       new UglifyJSPlugin(),
     ],
 
-    output: {
-      filename: '[name].[hash].js',
-      clean: true,
-      path: path.join(__dirname, '/dist/build'),
-      publicPath,
+    resolve: {
+      modules: ['node_modules'],
+      extensions: ['.js', '.jsx'],
+      alias: {
+        '@': path.resolve(__dirname, 'src/'),
+      },
+      fallback: {
+        util: require.resolve('util/'),
+      },
     },
 
     devServer: {
