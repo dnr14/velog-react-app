@@ -16,7 +16,6 @@ const App = () => {
         <Switch>
           <Route path="/post/:id" component={PostPage} />
           <Route path="/update/:id" component={UpdatePostPage} />
-          <Route path="/posttest" component={PostPage} />
           <Route path="/insert" component={InsertPostPage} />
           <Route path="/search" component={SearchPage} />
           <Route exact path="/" component={MainPage} />
