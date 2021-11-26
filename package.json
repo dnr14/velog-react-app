@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack --mode=production",
     "dev": "webpack serve --mode=development",
-    "deploy": "aws s3 sync ./dist s3://velogclone-project --profile=sample-deploy-s3"
+    "deploy": "npm run delete && aws s3 sync ./dist s3://velogclone-project --profile=sample-deploy-s3",
+    "delete": "aws s3 rm s3://velogclone-project/test --recursive --profile=sample-deploy-s3"
   },
   "prettier": {
     "printWidth": 80,
@@ -38,6 +39,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.1",
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^4.0.0",
+    "compression-webpack-plugin": "^9.0.1",
     "css-loader": "^6.5.1",
     "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
