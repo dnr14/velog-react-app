@@ -1,8 +1,8 @@
 import React from 'react';
-import Item from '@/Components/views/MainPage/Main/Item';
-import * as Styled from '@/Components/views/MainPage/Main/style';
+import Item from './Item';
+import * as Styled from './styles';
 
-const Main = ({ list, observer }) => {
+const List = ({ list, observer }) => {
   const { posts } = list;
   return (
     <main>
@@ -20,4 +20,4 @@ const Main = ({ list, observer }) => {
   );
 };
 
-export default Main;
+export default List;

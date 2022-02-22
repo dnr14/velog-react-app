@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Main from '@/Components/views/MainPage/Main/Main';
-import Menu from '@/Components/views/MainPage/Menu/Menu';
-import * as Styled from '@/Components/views/MainPage/Main/style';
+import Loading from '@/Components/common/Loading';
+import * as Styled from './styles';
 import * as posts from '@/api/posts';
 import * as comments from '@/api/comments';
-import Modal from '@/Components/views/InsertPostPage/Modal/Modal';
-import Loading from './Loading/Loading';
 import useObserver from '@/hooks/useObserver';
+import Menu from './Menu';
+import List from './List';
+import Modal from '@/Components/common/Modal';
 
 function MainPage() {
   const crrentLink = useRef(null);
@@ -36,19 +36,18 @@ function MainPage() {
     }
   };
 
-  useEffect(
-    () =>
-      call(async () => {
-        const postsResponse = await posts.get();
-        const { results, page, totalPages, limit } = postsResponse.data;
-        const newPosts = await comments.getComments(results);
-        return {
-          posts: [...newPosts],
-          state: { page, totalPages, limit },
-        };
-      }),
-    [call]
-  );
+  useEffect(() => {
+    const fetch = async () => {
+      const postsResponse = await posts.get();
+      const { results, page, totalPages, limit } = postsResponse.data;
+      const newPosts = await comments.getComments(results);
+      return {
+        posts: [...newPosts],
+        state: { page, totalPages, limit },
+      };
+    };
+    call(fetch);
+  }, [call]);
 
   useEffect(() => {
     if (error) {
@@ -83,7 +82,7 @@ function MainPage() {
           isSelectOpen={isSelectOpen}
           ref={[crrentLink, lineRef]}
         />
-        {list && <Main list={list} observer={observer} />}
+        {list && <List list={list} observer={observer} />}
       </Styled.Container>
     </>
   );

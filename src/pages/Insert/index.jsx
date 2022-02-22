@@ -6,11 +6,7 @@ import {
   insertTransientStorageRemoveAction,
 } from '@/modules/insertTransientStorage';
 import { newlineCount } from '@/utils/textUtil';
-import Write from '@/Components/views/InsertPostPage/Write/Write';
-import * as Styled from '@/Components/views/InsertPostPage/Write/style';
-import CoustomEditor from '@/Components/views/InsertPostPage/Editor/CoustomEditor';
-import Thumb from '@/Components/views/InsertPostPage/Thumb/Thumb';
-import Modal from '@/Components/views/InsertPostPage/Modal/Modal';
+import Write from './Write';
 import * as posts from '@/api/posts';
 import useResize from '@/hooks/useResize';
 import s3Upload from '@/utils/s3Upload';
@@ -281,7 +277,7 @@ function InsertPostPage() {
   return (
     <>
       <Write onSubmit={handleSubmit}>
-        {isThumbOpen && (
+        {/* {isThumbOpen && (
           <Thumb
             file={file}
             isOpen={isThumbOpen}
@@ -333,7 +329,7 @@ function InsertPostPage() {
           </Styled.TagBox>
         </Styled.Title>
         <Styled.Body>
-          <CoustomEditor
+          <Editor
             onChange={ckEditorChange}
             data={transientStorageState.data.body}
           />
@@ -373,7 +369,7 @@ function InsertPostPage() {
               </Styled.Button>
             </div>
           </div>
-        </Styled.ButtonBox>
+        </Styled.ButtonBox> */}
       </Write>
     </>
   );

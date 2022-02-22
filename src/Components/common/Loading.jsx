@@ -7,16 +7,16 @@ const Loading = ({ loading }) => {
   return createPortal(
     <>
       {loading && (
-        <StyledDiv>
-          <img src={loding} alt="loading-bar" />
-        </StyledDiv>
+        <LoaingWrapper>
+          <img src={loding} alt="loading" />
+        </LoaingWrapper>
       )}
     </>,
     document.querySelector('#modal')
   );
 };
 
-const StyledDiv = styled.div`
+const LoaingWrapper = styled.div`
   position: fixed;
   display: flex;
   justify-content: center;

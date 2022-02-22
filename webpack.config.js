@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
+// const CompressionPlugin = require('compression-webpack-plugin');
 const { styles } = require('@ckeditor/ckeditor5-dev-utils');
 const dotenv = require('dotenv');
 
@@ -138,7 +138,6 @@ module.exports = (_, argv) => {
         NODE_ENV: JSON.stringify(nodeEnv),
       }),
       new UglifyJSPlugin(),
-      new CompressionPlugin(),
     ],
 
     resolve: {

@@ -3,8 +3,7 @@ import useFetch from '@/hooks/useFatch';
 import Search from './Search/Search';
 import { postsByKeyWord } from '@/api/posts';
 import { getComments } from '@/api/comments';
-import Modal from '../InsertPostPage/Modal/Modal';
-import Loading from '../MainPage/Loading/Loading';
+import Modal from '../../common/Modal';
 
 const REQUEST_DELAY = 1000;
 let timer;
@@ -144,7 +143,7 @@ const SearchPage = () => {
 
   return (
     <>
-      <Loading loading={loading} />
+      {/* <Loading loading={loading} /> */}
       {isModalOpen && (
         <Modal
           isOpen={isModalOpen}

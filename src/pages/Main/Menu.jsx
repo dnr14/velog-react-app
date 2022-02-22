@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { Link } from 'react-router-dom';
-import MenuBar from './MenuBar';
-import * as Styled from './style';
+import MenuBar from '@/Components/common/MenuBar';
+import * as Styled from './styles';
 
 const Menu = (
   {
@@ -15,8 +15,8 @@ const Menu = (
   [crrentLink, lineRef]
 ) => {
   return (
-    <Styled.FlexBox>
-      <Styled.RightBox>
+    <Styled.MenuWrapper>
+      <Styled.RightSelectWrapper>
         <div>
           <Link
             to="/"
@@ -77,7 +77,7 @@ const Menu = (
             </Styled.UlWrapper>
           </MenuBar>
         )}
-      </Styled.RightBox>
+      </Styled.RightSelectWrapper>
       <Styled.NoticeBox onClick={handleManubarClick} id="notice">
         <svg
           stroke="currentColor"
@@ -105,7 +105,7 @@ const Menu = (
           </MenuBar>
         )}
       </Styled.NoticeBox>
-    </Styled.FlexBox>
+    </Styled.MenuWrapper>
   );
 };
 

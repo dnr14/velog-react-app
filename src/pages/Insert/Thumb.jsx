@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button } from '../Write/style';
-import * as Styled from './style';
+import * as Styled from './styles';
 
 const Thumb = ({ file, isOpen, setIsOpen, s3Fileupload }) => {
   const [visible, setVisible] = useState(false);
@@ -84,12 +83,12 @@ const Thumb = ({ file, isOpen, setIsOpen, s3Fileupload }) => {
               </div>
             </div>
             <Styled.ButtonBox>
-              <Button color="gray" type="button" onClick={modalClose}>
+              <Styled.Button color="gray" type="button" onClick={modalClose}>
                 취소
-              </Button>
-              <Button color="teal" type="submit">
+              </Styled.Button>
+              <Styled.Button color="teal" type="submit">
                 출간하기
-              </Button>
+              </Styled.Button>
             </Styled.ButtonBox>
           </section>
         </div>

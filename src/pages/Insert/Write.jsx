@@ -1,6 +1,6 @@
 import React from 'react';
-import * as Styled from './style';
-import * as Main from '@/Components/views/MainPage/Main/style';
+import * as Styled from './styles';
+import * as Main from '@/pages/Main/styles';
 
 const Write = ({ children, ...rest }) => {
   return (

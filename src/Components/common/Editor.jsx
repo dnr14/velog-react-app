@@ -129,12 +129,8 @@ const editorConfiguration = {
   placeholder: '당신이 이야기를 적어주세요.',
 };
 
-const CoustomEditor = ({ ...rest }) => {
-  return (
-    <>
-      <CKEditor editor={ClassicEditor} config={editorConfiguration} {...rest} />
-    </>
-  );
-};
+const Editor = ({ ...rest }) => (
+  <CKEditor editor={ClassicEditor} config={editorConfiguration} {...rest} />
+);
 
-export default CoustomEditor;
+export default Editor;

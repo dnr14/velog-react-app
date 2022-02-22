@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
+import Thumb from '@/pages/Insert/Thumb';
 import {
   updateTransientStorageAddAction,
   updateTransientStorageRemoveAction,
@@ -9,12 +10,11 @@ import { decodeEntities } from '@/utils/editorUtil.js';
 import { newlineCount } from '@/utils/textUtil';
 import useResize from '@/hooks/useResize';
 import * as posts from '@/api/posts';
-import CoustomEditor from '@/Components/views/InsertPostPage/Editor/CoustomEditor';
-import * as Styled from '@/Components/views/InsertPostPage/Write/style';
-import Write from '@/Components/views/InsertPostPage/Write/Write';
-import Thumb from '@/Components/views/InsertPostPage/Thumb/Thumb';
-import Modal from '@/Components/views/InsertPostPage/Modal/Modal';
 import s3Upload from '@/utils/s3Upload';
+import Modal from '@/Components/common/Modal';
+import Editor from '@/Components/common/Editor';
+import * as Styled from '@/pages/Insert/styles';
+import Write from '@/pages/Insert/Write';
 
 const KEY_ENUM = {
   enter: 'Enter',
@@ -186,7 +186,6 @@ function UpdatePostPage() {
             setTimeout(() => history.push('/'), 2000);
           }
         } catch (error) {
-          console.log(error);
           setIsModalOpen(true);
           setModalMessage(
             <div className="red">
@@ -392,7 +391,7 @@ function UpdatePostPage() {
           </Styled.TagBox>
         </Styled.Title>
         <Styled.Body>
-          <CoustomEditor
+          <Editor
             onChange={ckEditorChange}
             data={
               transientStorageState[id] ? transientStorageState[id].body : body

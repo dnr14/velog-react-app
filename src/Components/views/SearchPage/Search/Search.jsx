@@ -1,8 +1,8 @@
 import React from 'react';
 import * as Styled from './style';
 import Item from './Item';
-import { SelectBox, UlWrapper } from '../../MainPage/Menu/style';
-import MenuBar from '../../MainPage/Menu/MenuBar';
+import { SelectBox, UlWrapper } from '@/pages/Main/styles';
+import MenuBar from '@/Components/common/MenuBar';
 
 const Search = ({
   list,

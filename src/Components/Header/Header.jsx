@@ -2,10 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import * as Styled from './style';
 
-const Top = () => {
+const Header = () => {
   return (
-    <Styled.Height>
-      <Styled.Container>
+    <Styled.Container>
+      <Styled.Wrapper>
         <Styled.Logo>
           <Link to="/">
             <svg width="71" height="24" viewBox="0 0 71 24" fill="none">
@@ -30,9 +30,9 @@ const Top = () => {
             <Styled.InsertButton type="button">새 글 작성</Styled.InsertButton>
           </Link>
         </Styled.SearchBox>
-      </Styled.Container>
-    </Styled.Height>
+      </Styled.Wrapper>
+    </Styled.Container>
   );
 };
 
-export default Top;
+export default Header;
