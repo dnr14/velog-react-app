@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { css } from 'styled-components';
+import { getBrandColor1, getRedColor1, tab1 } from '@/assets/style/theme';
 
 const DELAY = 500;
 const Modal = ({ isOpen, setIsOpen, children, closeDelay }) => {
@@ -53,7 +54,7 @@ const ModalWrapper = styled.div`
       transition: transform 0.5s, z-index 1s ease-in;
     `}
 
-  ${({ theme }) => theme.insert.media.tab1} {
+  ${tab1} {
     top: 0;
     left: 0;
     right: 0;
@@ -66,10 +67,10 @@ const ModalWrapper = styled.div`
     padding: 1rem;
     padding-right: 3rem;
     &.green {
-      background: rgb(18, 184, 134);
+      background: ${getBrandColor1};
     }
     &.red {
-      background: #e74c3c;
+      background: ${getRedColor1};
     }
   }
 `;

@@ -1,14 +1,22 @@
 import styled from 'styled-components';
+import {
+  tab1,
+  pc1,
+  getDarkColor1,
+  getDarkColor4,
+  getWhiteColor3,
+  getDarkColor5,
+} from '@/assets/style/theme';
 
 export const StyledSvg = styled.svg`
   width: 1.5rem;
   height: 1.5rem;
   margin-right: 1.25rem;
   transition: all 0.125s ease-in 0s;
-  fill: rgb(33, 37, 41);
+  fill: ${getDarkColor1};
   flex-shrink: 0;
 
-  ${({ theme }) => theme.main.media.tab1} {
+  ${tab1} {
     width: 1rem;
     height: 1rem;
     margin-right: 0.75rem;
@@ -22,11 +30,11 @@ export const Container = styled.div`
   margin-right: auto;
   box-sizing: border-box;
 
-  ${({ theme }) => theme.main.media.pc1} {
+  ${pc1} {
     padding-left: 1rem;
     padding-right: 1rem;
   }
-  ${({ theme }) => theme.main.media.tab1} {
+  ${tab1} {
     margin-top: 0.5rem;
     width: 100%;
   }
@@ -36,7 +44,7 @@ export const InputBox = styled.div`
   margin-bottom: 1.5rem;
   position: relative;
   display: flex;
-  border: 1px solid rgb(33, 37, 41);
+  border: 1px solid ${getDarkColor1};
   -webkit-box-align: center;
   align-items: center;
   transition: all 0.125s ease-in 0s;
@@ -57,7 +65,7 @@ export const InputBox = styled.div`
     padding: 0px;
     border: none;
     outline: 0px;
-    color: rgb(73, 80, 87);
+    color: ${getDarkColor5};
     min-width: 0px;
 
     &::placeholder {
@@ -65,7 +73,7 @@ export const InputBox = styled.div`
     }
   }
 
-  ${({ theme }) => theme.main.media.tab1} {
+  ${tab1} {
     height: 2.25rem;
     padding-left: 1rem;
     padding-right: 1rem;
@@ -87,19 +95,19 @@ export const CountBox = styled.p`
   margin-bottom: 4rem;
   font-size: 1.125rem;
   line-height: 1.5;
-  color: rgb(73, 80, 87);
+  color: ${getDarkColor5};
   b {
-    color: rgb(33, 37, 41);
+    color: ${getDarkColor1};
   }
 
-  ${({ theme }) => theme.main.media.tab1} {
+  ${tab1} {
     font-size: 1rem;
     margin-bottom: 1rem;
   }
 `;
 
 export const ListBox = styled.div``;
-export const ItemBox = styled.div`
+export const ItemWrapper = styled.div`
   padding-top: 4rem;
   padding-bottom: 4rem;
   line-height: 1.5;
@@ -108,13 +116,13 @@ export const ItemBox = styled.div`
   }
 
   & + & {
-    border-top: 1px solid rgb(233, 236, 239);
+    border-top: 1px solid ${getWhiteColor3};
   }
 
   h2 {
     font-size: 1.5rem;
     margin: 0px;
-    color: rgb(33, 37, 41);
+    color: ${getDarkColor1};
     word-break: keep-all;
   }
 
@@ -122,7 +130,7 @@ export const ItemBox = styled.div`
     margin-bottom: 2rem;
     margin-top: 0.5rem;
     font-size: 1rem;
-    color: rgb(73, 80, 87);
+    color: ${getDarkColor5};
     word-break: keep-all;
     overflow-wrap: break-word;
   }
@@ -132,7 +140,7 @@ export const ItemBox = styled.div`
     -webkit-box-align: center;
     align-items: center;
     margin-top: 1rem;
-    color: rgb(134, 142, 150);
+    color: ${getDarkColor4};
     font-size: 0.875rem;
   }
   .separator {
@@ -140,7 +148,7 @@ export const ItemBox = styled.div`
     margin-right: 0.5rem;
   }
 
-  ${({ theme }) => theme.main.media.tab1} {
+  ${tab1} {
     padding-top: 2rem;
     padding-bottom: 2rem;
     h2 {

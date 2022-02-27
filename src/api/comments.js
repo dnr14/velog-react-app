@@ -1,9 +1,6 @@
 import http from '@/api/http';
 
-export const get = params =>
-  http.get('/comments', {
-    params,
-  });
+export const get = params => http.get('/comments', { params });
 
 export async function getComments(posts) {
   const promises = posts.map(({ id }) => get({ postId: id }));

@@ -17,7 +17,7 @@ nav,section {
 body {
   line-height: 1;
   font-family: 'Nanum Gothic', sans-serif;
-  background: rgb(248, 249, 250);
+  background:rgb(248, 249, 250);
 }
 ol,
 ul {

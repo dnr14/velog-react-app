@@ -1,4 +1,17 @@
 import styled from 'styled-components';
+import {
+  getDarkColor1,
+  getBrandColor1,
+  getWhiteColor1,
+  getWhiteColor2,
+  getDarkColor2,
+  getDarkColor4,
+  getDarkColor5,
+  tab1,
+  tab2,
+  pc1,
+  getDarkColor3,
+} from '@/assets/style/theme';
 
 export const MenuWrapper = styled.div`
   display: flex;
@@ -26,7 +39,7 @@ export const RightSelectWrapper = styled.div`
       justify-content: center;
       font-size: 1.125rem;
       text-decoration: none;
-      color: rgb(134, 142, 150);
+      color: ${getDarkColor4};
       height: 3rem;
       transition: color 0.5s ease-in, font-weight 0.5s ease-in;
       & > svg {
@@ -34,10 +47,10 @@ export const RightSelectWrapper = styled.div`
         margin-right: 0.5rem;
       }
       &.active {
-        color: rgb(52, 58, 64);
+        color: ${getDarkColor2};
         font-weight: bold;
       }
-      ${({ theme }) => theme.main.media.tab2} {
+      ${tab2} {
         font-size: 1rem;
         width: 5rem;
         & > svg {
@@ -50,7 +63,7 @@ export const RightSelectWrapper = styled.div`
       bottom: 0;
       position: absolute;
       height: 2px;
-      background-color: black;
+      background-color: ${getDarkColor3};
       width: 50%;
       transition: transform 0.25s ease-in;
       &.active {
@@ -58,7 +71,7 @@ export const RightSelectWrapper = styled.div`
       }
     }
 
-    ${({ theme }) => theme.main.media.tab2} {
+    ${tab2} {
       width: 10rem;
     }
   }
@@ -66,7 +79,7 @@ export const RightSelectWrapper = styled.div`
 
 export const SelectBox = styled.div`
   display: flex;
-  background: white;
+  background: ${getWhiteColor2};
   height: 2rem;
   width: 5rem;
   border-radius: 4px;
@@ -75,7 +88,7 @@ export const SelectBox = styled.div`
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   font-weight: 600;
-  color: rgb(73, 80, 87);
+  color: ${getDarkColor5};
   font-size: 0.875rem;
   box-shadow: rgb(0 0 0 / 5%) 0px 0px 4px;
   cursor: pointer;
@@ -85,7 +98,7 @@ export const SelectBox = styled.div`
     height: 1.5rem;
   }
 
-  ${({ theme }) => theme.main.media.pc1} {
+  ${pc1} {
     width: 4.25rem;
     font-size: 0.75rem;
   }
@@ -103,11 +116,11 @@ export const UlWrapper = styled.ul`
     padding: 0.75rem 1rem;
   }
   li + li {
-    border-top: 1px solid rgb(241, 243, 245);
+    border-top: 1px solid ${getWhiteColor1};
   }
   li:hover {
-    background: rgb(248, 249, 250);
-    color: rgb(18, 184, 134);
+    background: ${getWhiteColor2};
+    color: ${getBrandColor1};
   }
 `;
 
@@ -119,38 +132,24 @@ export const NoticeBox = styled.div`
   & > svg {
     cursor: pointer;
     font-size: 1.5rem;
-    color: rgb(134, 142, 150);
+    color: ${getDarkColor4};
   }
 `;
 
-export const Container = styled.div`
-  max-width: 1728px;
-  margin: 0 auto;
-  ${({ theme }) => theme.main.media.pc3} {
-    width: 1376px;
-  }
-  ${({ theme }) => theme.main.media.pc2} {
-    width: 1024px;
-  }
-  ${({ theme }) => theme.main.media.pc1} {
-    width: calc(100% - 2rem);
-  }
-`;
-
-export const LayOut = styled.div`
+export const ListWrapper = styled.div`
   margin: -1rem;
-  ${({ theme }) => theme.main.media.tab1} {
+  & > div {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  ${tab1} {
     margin: 0px;
   }
 `;
 
-export const ListBox = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`;
 export const ItemWrapper = styled.div`
   width: 20rem;
-  background-color: white;
+  background-color: ${getWhiteColor2};
   border-radius: 4px;
   box-shadow: rgb(0 0 0 / 4%) 0px 4px 16px 0px;
   transition: box-shadow 0.25s ease-in 0s, transform 0.25s ease-in 0s;
@@ -163,14 +162,14 @@ export const ItemWrapper = styled.div`
     transform: translateY(-8px);
     box-shadow: rgb(0 0 0 / 8%) 0px 12px 20px 0px;
   }
-  ${({ theme }) => theme.main.media.pc1} {
+  ${pc1} {
     width: calc(50% - 2rem);
     &:hover {
       transform: translateY(0px);
       box-shadow: rgb(0 0 0 / 8%) 0px 12px 20px 0px;
     }
   }
-  ${({ theme }) => theme.main.media.tab1} {
+  ${tab1} {
     width: 100%;
     margin: 0px;
     & + & {
@@ -211,7 +210,7 @@ export const Title = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  color: rgb(33, 37, 41);
+  color: ${getDarkColor1};
 `;
 
 export const Content = styled.p`
@@ -223,7 +222,7 @@ export const Content = styled.p`
   height: 3.9375rem;
   overflow: hidden;
   text-overflow: ellipsis;
-  color: rgb(73, 80, 87);
+  color: ${getDarkColor5};
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   display: -webkit-box;
@@ -232,7 +231,7 @@ export const Content = styled.p`
 export const Date = styled.div`
   font-size: 0.75rem;
   line-height: 1.5;
-  color: rgb(134, 142, 150);
+  color: ${getDarkColor4};
 `;
 
 export const Etc = styled.span`

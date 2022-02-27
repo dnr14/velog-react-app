@@ -1,12 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Loading from '@/Components/common/Loading';
-import * as Styled from './styles';
 import * as posts from '@/api/posts';
 import * as comments from '@/api/comments';
 import useObserver from '@/hooks/useObserver';
 import Menu from './Menu';
 import List from './List';
 import Modal from '@/Components/common/Modal';
+import withLayout from '@/hoc/withLayout';
 
 function MainPage() {
   const crrentLink = useRef(null);
@@ -61,8 +60,7 @@ function MainPage() {
   }, [error]);
 
   return (
-    <>
-      <Loading loading={loading} />
+    <div>
       {isModalOpen && (
         <Modal
           isOpen={isModalOpen}
@@ -72,20 +70,18 @@ function MainPage() {
           {modalMessage}
         </Modal>
       )}
-      <Styled.Container>
-        <Menu
-          handleManubarClick={handleManubarClick}
-          handleClick={handleClick}
-          setIsSelectOpen={setIsSelectOpen}
-          setIsNoticeOpen={setIsNoticeOpen}
-          isNoticeOpen={isNoticeOpen}
-          isSelectOpen={isSelectOpen}
-          ref={[crrentLink, lineRef]}
-        />
-        {list && <List list={list} observer={observer} />}
-      </Styled.Container>
-    </>
+      <Menu
+        handleManubarClick={handleManubarClick}
+        handleClick={handleClick}
+        setIsSelectOpen={setIsSelectOpen}
+        setIsNoticeOpen={setIsNoticeOpen}
+        isNoticeOpen={isNoticeOpen}
+        isSelectOpen={isSelectOpen}
+        ref={[crrentLink, lineRef]}
+      />
+      <List list={list} loading={loading} observer={observer} />
+    </div>
   );
 }
 
-export default MainPage;
+export default withLayout(MainPage);

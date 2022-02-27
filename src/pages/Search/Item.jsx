@@ -6,7 +6,7 @@ import { makeYYMMDD } from '@/utils/dateUtil';
 
 const Item = ({ id, body, title, createdAt, commentsTotalResults }) => {
   return (
-    <Styled.ItemBox key={id}>
+    <Styled.ItemWrapper key={id}>
       <Link to={`/post/${id}`}>
         <h2>{title}</h2>
       </Link>
@@ -16,7 +16,7 @@ const Item = ({ id, body, title, createdAt, commentsTotalResults }) => {
         <div className="separator">·</div>
         {commentsTotalResults}개의 댓글
       </div>
-    </Styled.ItemBox>
+    </Styled.ItemWrapper>
   );
 };
 

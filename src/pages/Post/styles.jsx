@@ -46,10 +46,11 @@ export const PostContent = styled.div`
   }
 `;
 
-export const ButtonWrap = styled.div`
+export const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 10px;
+  margin-top: 32px;
 
   button {
     display: flex;
@@ -64,7 +65,7 @@ export const ButtonWrap = styled.div`
     cursor: pointer;
   }
 
-  .insertBtn {
+  .confirm {
     background-color: #14b885;
 
     &:hover {
@@ -72,7 +73,7 @@ export const ButtonWrap = styled.div`
     }
   }
 
-  .cancelBtn {
+  .cancel {
     background-color: #858e96;
 
     &:hover {
@@ -83,6 +84,12 @@ export const ButtonWrap = styled.div`
 
 export const Form = styled.form`
   margin-bottom: 50px;
+  margin-top: 30px;
+`;
+
+export const Confirm = styled.div`
+  margin: 20px 0;
+  font-size: 0.9rem;
 `;
 
 export const TextArea = styled.textarea`
@@ -122,10 +129,6 @@ export const CommentWrap = styled.div`
   flex-direction: column;
   border-bottom: 1px solid #dbdbdb;
   padding: 24px 0;
-
-  $:last-child {
-    border-bottom: 1px solid pink;
-  }
 `;
 
 export const CommentManage = styled.div`
@@ -152,7 +155,7 @@ export const CommentInfo = styled.div`
   }
 `;
 
-export const PostModal = styled.div`
+export const Wrapper = styled.div`
   position: fixed;
   top: 0;
   display: flex;
@@ -164,12 +167,41 @@ export const PostModal = styled.div`
   z-index: 1000;
 `;
 
-export const InnerModal = styled.div`
+export const InnerWrapper = styled.div`
   width: 300px;
   padding: 32px 24px;
   background-color: white;
-  box-shadow: rgba(0, 0, 0, 0.09) 0px 2px 12px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
   transition: all 600ms cubic-bezier(0.86, 0, 0.07, 1);
   transform: matrix(1, 0, 0, 1, 0, 0);
   border-radius: 5px;
+`;
+
+export const PostWrapper = styled.div`
+  width: 80vw;
+  height: 100%;
+  padding: 10%;
+`;
+export const PostHeader = styled.div`
+  margin-bottom: 40px;
+`;
+export const PostInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+export const PostTags = styled.div`
+  display: flex;
+  gap: 14px;
+  margin-top: 14px;
+`;
+
+export const PostComments = styled.div`
+  border-top: 1px solid rgb(219, 219, 219);
+  margin-top: 50px;
+  padding-top: 50px;
+`;
+
+export const CommentsTitle = styled.h4`
+  margin: 24px 0 16px 0;
 `;

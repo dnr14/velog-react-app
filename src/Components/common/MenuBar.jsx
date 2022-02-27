@@ -1,5 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import {
+  getWhiteColor1,
+  getBrandColor1,
+  getDarkColor1,
+  getDarkColor2,
+  getWhiteColor2,
+} from '@/assets/style/theme';
 
 const MenuBar = ({ isOpen, setIsOpen, children }) => {
   const [visible, setVisible] = useState(false);
@@ -30,6 +37,7 @@ const MenuBarWrapper = styled.div`
   position: absolute;
   right: 0;
   top: 100%;
+  bottom: 0;
   z-index: 0;
   transition: z-index 0.25s ease-in;
 
@@ -44,8 +52,8 @@ const MenuBarInnerWrraper = styled.div`
   margin-top: 0.5rem;
   width: 12rem;
   box-shadow: rgb(0 0 0 / 10%) 0px 0px 8px 0px;
-  background: white;
-  color: rgb(33, 37, 41);
+  background: ${getWhiteColor1};
+  color: ${getDarkColor1};
   transform-origin: right top;
   opacity: 0;
   transition: opacity 0.35s, transform 0.35s, z-index 0.35s ease-in;
@@ -60,21 +68,21 @@ const MenuBarInnerWrraper = styled.div`
 
   .contact {
     line-height: 1rem;
-    border-top: 1px solid rgb(241, 243, 245);
+    border-top: 1px solid ${getWhiteColor1};
     padding: 1rem;
     h5 {
       margin: 0px;
       font-size: 0.75rem;
     }
     .email {
-      color: rgb(52, 58, 64);
+      color: ${getDarkColor2};
       font-size: 0.75rem;
     }
   }
 
   .checked {
-    color: rgb(248, 249, 250);
-    background: rgb(18, 184, 134);
+    color: ${getWhiteColor2};
+    background: ${getBrandColor1};
   }
 `;
 
