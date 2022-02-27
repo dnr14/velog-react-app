@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import NotFoundImg from '@/assets/images/404.png';
+import { getBrandColor2, getBrandColor3 } from '@/assets/style/theme';
 
 const Wrapper = styled.div`
   display: flex;
@@ -36,7 +37,7 @@ const Wrapper = styled.div`
   button {
     padding: 0.8rem 1.5rem;
     cursor: pointer;
-    background: rgba(46, 204, 113, 1);
+    background: ${getBrandColor2};
     border-radius: 5px;
     font-weight: 900;
     color: #fff;
@@ -44,24 +45,22 @@ const Wrapper = styled.div`
     box-shadow: 0px 2px 5px rgba(00, 00, 00, 0.8);
 
     &:hover {
-      background: rgba(46, 204, 113, 0.8);
+      background: ${getBrandColor3};
     }
   }
 `;
 
-const NotFount = () => {
-  return (
-    <Wrapper>
-      <div>
-        <img src={NotFoundImg} alt="404" />
-        <span>NOT FOUND</span>
-      </div>
-      <span>잘못 된 페이지입니다.</span>
-      <Link to="/">
-        <button type="button">홈으로</button>
-      </Link>
-    </Wrapper>
-  );
-};
+const NotFount = () => (
+  <Wrapper>
+    <div>
+      <img src={NotFoundImg} alt="404" />
+      <span>NOT FOUND</span>
+    </div>
+    <span>잘못 된 페이지입니다.</span>
+    <Link to="/">
+      <button type="button">홈으로</button>
+    </Link>
+  </Wrapper>
+);
 
 export default memo(NotFount);

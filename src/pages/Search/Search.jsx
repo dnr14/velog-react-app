@@ -1,4 +1,5 @@
 import React from 'react';
+import withLoading from '@/hoc/withLoading';
 import * as Styled from './style';
 import Item from './Item';
 import { SelectBox, UlWrapper } from '@/pages/Main/styles';
@@ -101,4 +102,4 @@ const Search = ({
   );
 };
 
-export default Search;
+export default withLoading(Search);

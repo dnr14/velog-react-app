@@ -16,6 +16,8 @@ import ImageStyle from '@ckeditor/ckeditor5-image/src/imagestyle.js';
 import ImageToolbar from '@ckeditor/ckeditor5-image/src/imagetoolbar.js';
 import ImageUpload from '@ckeditor/ckeditor5-image/src/imageupload.js';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading.js';
+import styled from 'styled-components';
+import { tab1 } from '@/assets/style/theme';
 
 const fontSize = {
   options: [
@@ -129,8 +131,21 @@ const editorConfiguration = {
   placeholder: '당신이 이야기를 적어주세요.',
 };
 
-const Editor = ({ ...rest }) => (
-  <CKEditor editor={ClassicEditor} config={editorConfiguration} {...rest} />
-);
+const Editor = ({ ...rest }) => {
+  return (
+    <Body>
+      <CKEditor editor={ClassicEditor} config={editorConfiguration} {...rest} />
+    </Body>
+  );
+};
+
+const Body = styled.div`
+  padding-left: 3rem;
+  padding-right: 3rem;
+
+  ${tab1} {
+    padding: 1rem;
+  }
+`;
 
 export default Editor;

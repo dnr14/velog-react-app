@@ -1,15 +1,20 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import Buttons from '@/Components/Buttons';
+import Title from '@/Components/Title';
+import { newlineCount } from '@/utils/textUtil';
 import {
   insertTransientStorageAddAction,
   insertTransientStorageRemoveAction,
 } from '@/modules/insertTransientStorage';
-import { newlineCount } from '@/utils/textUtil';
-import Write from './Write';
+import Form from '@/Components/common/Form';
 import * as posts from '@/api/posts';
 import useResize from '@/hooks/useResize';
 import s3Upload from '@/utils/s3Upload';
+import Thumb from '@/Components/common/Thumb';
+import Modal from '@/Components/common/Modal';
+import Editor from '@/Components/common/Editor';
 
 const KEY_ENUM = {
   enter: 'Enter',
@@ -247,7 +252,6 @@ function InsertPostPage() {
   const thumbModalOpen = () => setIsThumbOpen(true);
 
   // 뒤로가기
-  const goBack = useCallback(() => history.goBack(), [history]);
 
   const messages = useMemo(
     () => [
@@ -273,105 +277,44 @@ function InsertPostPage() {
       }));
     }
   }, [transientStorageState]);
-
   return (
-    <>
-      <Write onSubmit={handleSubmit}>
-        {/* {isThumbOpen && (
-          <Thumb
-            file={file}
-            isOpen={isThumbOpen}
-            setIsOpen={setIsThumbOpen}
-            s3Fileupload={s3Fileupload}
-          />
-        )}
-        {isModalOpen && (
-          <Modal
-            isOpen={isModalOpen}
-            setIsOpen={setIsModalOpen}
-            closeDelay={modalCloseDelay}
-          >
-            {modalMessage}
-          </Modal>
-        )}
-        <Styled.Title>
-          <textarea
-            id="title"
-            ref={textareaRef}
-            value={title}
-            onChange={handleChange}
-            placeholder="제목을 입력하세요."
-            style={{
-              height: `${newlineCount(title) * textAreaHeight}px`,
-            }}
-          />
-          <Styled.Line />
-          <Styled.TagBox>
-            {tags &&
-              [...tags].map((tag, idx) => (
-                <Styled.Tag key={idx} onClick={tagClick}>
-                  {tag}
-                </Styled.Tag>
-              ))}
-            <input
-              type="text"
-              id="tags"
-              placeholder="태그를 입력해주세요."
-              ref={tagInputRef}
-              autoComplete="off"
-              onKeyDown={handlekeyDown()}
-              onKeyPress={handlekeyPress()}
-            />
-
-            <Styled.InputMessage>
-              {tags && tags.size === 7 ? messages[1] : messages[0]}
-            </Styled.InputMessage>
-          </Styled.TagBox>
-        </Styled.Title>
-        <Styled.Body>
-          <Editor
-            onChange={ckEditorChange}
-            data={transientStorageState.data.body}
-          />
-        </Styled.Body>
-        <Styled.ButtonBox
-          style={{ width: textAreaWidth > 767 ? `${textAreaWidth}px` : `auto` }}
-        >
-          <div>
-            <Styled.Button type="button" onClick={goBack}>
-              <svg
-                stroke="currentColor"
-                fill="currentColor"
-                strokeWidth="0"
-                viewBox="0 0 24 24"
-                height="1em"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
-              </svg>
-              나가기
-            </Styled.Button>
-            <div>
-              <Styled.Button
-                type="button"
-                color="lightGray"
-                onClick={handleTransientStorage}
-              >
-                임시저장
-              </Styled.Button>
-              <Styled.Button
-                type="button"
-                color="teal"
-                onClick={thumbModalOpen}
-              >
-                출간하기
-              </Styled.Button>
-            </div>
-          </div>
-        </Styled.ButtonBox> */}
-      </Write>
-    </>
+    <Form onSubmit={handleSubmit}>
+      {isThumbOpen && (
+        <Thumb
+          file={file}
+          isOpen={isThumbOpen}
+          setIsOpen={setIsThumbOpen}
+          s3Fileupload={s3Fileupload}
+        />
+      )}
+      <Modal
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        closeDelay={modalCloseDelay}
+      >
+        {modalMessage}
+      </Modal>
+      <Title
+        ref={[textareaRef, tagInputRef]}
+        tags={tags}
+        title={title}
+        textAreaHeight={textAreaHeight}
+        messages={messages}
+        handleChange={handleChange}
+        tagClick={tagClick}
+        handlekeyDown={handlekeyDown}
+        handlekeyPress={handlekeyPress}
+      />
+      <Editor
+        onChange={ckEditorChange}
+        data={transientStorageState.data.body}
+      />
+      <Buttons
+        textAreaWidth={textAreaWidth}
+        thumbModalOpen={thumbModalOpen}
+        handleTransientStorage={handleTransientStorage}
+      />
+    </Form>
   );
 }
 

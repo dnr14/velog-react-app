@@ -2,16 +2,15 @@ import React, { memo } from 'react';
 import { createPortal } from 'react-dom';
 import styled from 'styled-components';
 import loding from '@/assets/images/loading.gif';
+import { pc1 } from '@/assets/style/theme';
 
 const Loading = ({ loading }) => {
+  if (!loading) return null;
+
   return createPortal(
-    <>
-      {loading && (
-        <LoaingWrapper>
-          <img src={loding} alt="loading" />
-        </LoaingWrapper>
-      )}
-    </>,
+    <LoaingWrapper>
+      <img src={loding} alt="loading" />
+    </LoaingWrapper>,
     document.querySelector('#modal')
   );
 };
@@ -27,11 +26,9 @@ const LoaingWrapper = styled.div`
   left: 0;
 
   & > img {
-    width: 15%;
+    width: 200px;
+    height: 200px;
     -webkit-user-drag: none;
-    ${({ theme }) => theme.main.media.pc1} {
-      width: 30%;
-    }
   }
 `;
 

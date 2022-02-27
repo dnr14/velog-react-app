@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import useFetch from '@/hooks/useFatch';
-import Search from './Search/Search';
+import Search from './Search';
 import { postsByKeyWord } from '@/api/posts';
 import { getComments } from '@/api/comments';
-import Modal from '../../common/Modal';
+import Modal from '@/Components/common/Modal';
 
 const REQUEST_DELAY = 1000;
 let timer;
@@ -143,7 +143,6 @@ const SearchPage = () => {
 
   return (
     <>
-      {/* <Loading loading={loading} /> */}
       {isModalOpen && (
         <Modal
           isOpen={isModalOpen}
@@ -158,6 +157,7 @@ const SearchPage = () => {
         isSelectOpen={isSelectOpen}
         keyWord={keyWord}
         selectBoxContent={selectBoxContent}
+        loading={loading}
         handleMenubarClick={handleMenubarClick}
         setIsSelectOpen={setIsSelectOpen}
         handleSearchChange={handleSearchChange}

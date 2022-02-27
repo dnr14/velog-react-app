@@ -21,9 +21,11 @@ const useResize = () => {
     };
 
     function resize() {
-      const currentH = window.innerWidth > 767 ? 66 : 43;
-      setTextAreaWidth(textareaRef.current.clientWidth);
-      setTextAreaHeight(currentH);
+      if (textareaRef.current !== null) {
+        const currentH = window.innerWidth > 767 ? 66 : 43;
+        setTextAreaWidth(textareaRef.current.clientWidth);
+        setTextAreaHeight(currentH);
+      }
     }
     resize();
     window.addEventListener('resize', throttling(resize, 200));

@@ -1,35 +1,27 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import * as Styled from '../style';
+import * as Styled from './styles';
 import { makeYYMMDD } from '@/utils/dateUtil';
-import instance from '@/api/http';
+import http from '@/api/http';
+import PostButtons from '@/Components/PostButtons';
 
-function Comment(props) {
-  const { comment } = props;
+function Comment({ comment }) {
   const [OpenUpdate, setOpenUpdate] = useState(false);
   const [CommentBody, setCommentBody] = useState(comment.body);
 
-  const deleteCommentHandler = () => {
-    instance.delete(`/comments/${comment.id}`).then(() => {
-      props.deleteComment(comment.id);
-    });
-  };
+  const deleteCommentHandler = () => http.delete(`/comments/${comment.id}`);
 
   const openUpdateWindow = () => {
     setCommentBody(comment.body);
     setOpenUpdate(!OpenUpdate);
   };
 
-  const updateCommentHandler = () => {
+  const updateCommentHandler = async () => {
     if (CommentBody.length === 0) return;
 
-    const variable = {
+    await http.patch(`/comments/${comment.id}`, {
       body: CommentBody,
-    };
-
-    instance.patch(`/comments/${comment.id}`, variable).then(() => {
-      setOpenUpdate(!OpenUpdate);
     });
+    setOpenUpdate(!OpenUpdate);
   };
 
   return (
@@ -46,7 +38,7 @@ function Comment(props) {
       {!OpenUpdate ? (
         <p style={{ margin: '18px 0', fontSize: '1.1rem' }}>{CommentBody}</p>
       ) : (
-        <Styled.Form style={{ marginTop: '30px' }}>
+        <Styled.Form>
           <Styled.TextArea
             placeholder="댓글을 작성하세요"
             value={CommentBody}
@@ -54,22 +46,12 @@ function Comment(props) {
               setCommentBody(e.target.value);
             }}
           />
-          <Styled.ButtonWrap>
-            <button
-              type="button"
-              className="cancelBtn"
-              onClick={openUpdateWindow}
-            >
-              취소
-            </button>
-            <button
-              type="button"
-              className="insertBtn"
-              onClick={updateCommentHandler}
-            >
-              댓글 수정
-            </button>
-          </Styled.ButtonWrap>
+          <PostButtons
+            firstText="취소"
+            secondText=" 댓글 수정"
+            handleCancelClick={openUpdateWindow}
+            handleConfirmClick={updateCommentHandler}
+          />
         </Styled.Form>
       )}
     </Styled.CommentWrap>

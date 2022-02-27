@@ -14,7 +14,6 @@ const DEV_PUBLIC_PATH = '/';
 const PRODUCTION = 'production';
 const DEVELOPMENT = 'development';
 const PRODUCT_PUBLIC_PATH = '/build/';
-// s3 api key와 버킷 이름 세팅
 const apiKey = process.env.API_KEY || '';
 const bucket = process.env.BUCKET || '';
 const port = process.env.port || 3000;
@@ -154,7 +153,6 @@ module.exports = (_, argv) => {
     devServer: {
       port,
       hot: true,
-      open: true,
       historyApiFallback: true,
       devMiddleware: {
         publicPath,
