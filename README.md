@@ -19,6 +19,16 @@
 <p align=center> 💼 <a href=https://github.com/dnr14/velog-react-app/wiki/%ED%99%94%EB%A9%B4-%EA%B5%AC%EC%84%B1-%EB%B0%8F-%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%84%A4%EB%AA%85> 화면 구성 및 주요 기능 설명</a></p>
 
 ## 1. 프로젝트 살펴보기 🔎
+### 🙎‍♂️ 팀 구성 
+|이민욱|김나영|
+| :---: | :---: |
+|![](https://github.com/dnr14.png?size=200)|![](https://github.com/dalping.png?size=200)
+|[dnr14](https://github.com/dnr14)|[dalping](https://github.com/dalping)
+|Front-End|Front-End|Back-End|Back-End|
+
+- 프론트엔드 개발자 2명
+
+<hr/>
 
 ### 🔥 개요
 
@@ -78,6 +88,7 @@ npm start
 ```
 
 <br>
+<hr/>
 
 # 2. 협업 👤
 
@@ -107,6 +118,7 @@ npm start
   - ex) `feature/login`
 
 <br>
+<hr/>
 
 # 3. 배포 👨‍🔧
 
